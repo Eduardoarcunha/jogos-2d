@@ -12,6 +12,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private float rollCooldown = 0.5f;
+    [SerializeField] private LayerMask enemyLayers;
 
     private bool isAttacking = false;
     private bool isRolling = false;
@@ -53,7 +54,7 @@ public class PlayerCombat : MonoBehaviour
         OnLightAttack?.Invoke();
         animator.SetTrigger("attackTrigger");
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
         {
