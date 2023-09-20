@@ -6,15 +6,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private Transform trans;
     private Rigidbody2D rb;
     private Animator animator;
+    [SerializeField] private Collider2D coll;
     
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float airPenalty = 0.9f;
     [SerializeField] private float accelerationForce = 400;
     [SerializeField] private float jumpForce = 14;
-    [SerializeField] private float unFreezeDelay = 0.3f;
+    [SerializeField] private float gravityScale = 3.0f;
 
     private float horizontalInput;
     private bool verticalInput;
@@ -29,12 +29,16 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        trans = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        rb.gravityScale = gravityScale;
 
-        PlayerCombat.OnLightAttack += Attack;
-        PlayerCombat.OnRoll += Roll;
+        animator = GetComponent<Animator>();
+        coll = GetComponent<Collider2D>();
+
+        PlayerAnimationEventsManager.OnStartLightAttackEvent += OnStartLightAttack;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartRollEvent += OnStartRoll;
+        PlayerAnimationEventsManager.OnEndRollEvent += OnEndRoll;
     }
 
     private void Update()
@@ -115,39 +119,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Roll()
+    private void OnStartLightAttack()
     {
-        StopCoroutine(UnfreezePlayer());
+        isAttacking = true;
+        rb.velocity = Vector2.zero;
+    }
+
+    private void OnEndLightAttack()
+    {
+        isAttacking = false;
+    }
+
+    private void OnStartRoll()
+    {
         isRolling = true;
         rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * 12, 0);
-        FreezePlayer();
+        coll.enabled = false;
+        rb.gravityScale = 0;
         
     }
 
-    private void Attack()
+    private void OnEndRoll()
     {
-        StopCoroutine(UnfreezePlayer());
-        isAttacking = true;
-        rb.velocity = Vector2.zero;
-        FreezePlayer();
-    }
-
-    private void FreezePlayer()
-    {
-        StartCoroutine(UnfreezePlayer());
-    }
-
-    private IEnumerator UnfreezePlayer()
-    {
-        AnimatorStateInfo currentAnimState = animator.GetCurrentAnimatorStateInfo(0);
-        float timeRemaining = (1.0f - currentAnimState.normalizedTime) * currentAnimState.length;
-        yield return new WaitForSeconds(timeRemaining + unFreezeDelay);
-        isAttacking = false;
+        coll.enabled = true;
+        rb.gravityScale = gravityScale;
         isRolling = false;
     }
 
     private void OnDestroy()
     {
-        PlayerCombat.OnLightAttack -= FreezePlayer;
+        PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
+        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
     }
 }

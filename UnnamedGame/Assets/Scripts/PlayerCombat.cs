@@ -5,13 +5,9 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    public static event Action OnLightAttack;
-    public static event Action OnRoll;
 
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
-    [SerializeField] private float attackCooldown = 0.5f;
-    [SerializeField] private float rollCooldown = 0.5f;
     [SerializeField] private LayerMask enemyLayers;
 
     private bool isAttacking = false;
@@ -23,6 +19,8 @@ public class PlayerCombat : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         PlayerController.OnChangeGroundedState += HandleChangeGroundedState;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttack;
+        PlayerAnimationEventsManager.OnEndRollEvent += OnEndRoll;
     }
 
     private void HandleChangeGroundedState(bool isGroundedState)
@@ -32,7 +30,6 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        // left click input
         if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded)
         {
             StartLightAttack();
@@ -45,42 +42,30 @@ public class PlayerCombat : MonoBehaviour
 
     private void StartLightAttack()
     {
-        isAttacking = true;
-        StartCoroutine(LightAttack());
-    }
-
-    private IEnumerator LightAttack()
-    {
-        OnLightAttack?.Invoke();
+        isAttacking = true;        
         animator.SetTrigger("attackTrigger");
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Hit " + enemy.name);
         }
-
-        AnimatorStateInfo currentAnimState = animator.GetCurrentAnimatorStateInfo(0);
-        float timeRemaining = (1.0f - currentAnimState.normalizedTime) * currentAnimState.length;
-
-        yield return new WaitForSeconds(timeRemaining + attackCooldown);
+    }
+     
+    private void OnEndLightAttack()
+    {
         isAttacking = false;
     }
+
 
     private void Roll()
     {
         isRolling = true;
-        StartCoroutine(Rolling());   
+        animator.SetTrigger("rollTrigger");
     }
 
-    private IEnumerator Rolling()
+    private void OnEndRoll()
     {
-        OnRoll?.Invoke();
-        animator.SetTrigger("rollTrigger");
-        AnimatorStateInfo currentAnimState = animator.GetCurrentAnimatorStateInfo(0);
-        float timeRemaining = (1.0f - currentAnimState.normalizedTime) * currentAnimState.length;
-        yield return new WaitForSeconds(timeRemaining + rollCooldown);
         isRolling = false;
     }
 
@@ -88,5 +73,12 @@ public class PlayerCombat : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+
+    private void OnDestroy()
+    {
+        PlayerController.OnChangeGroundedState -= HandleChangeGroundedState;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
+        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
     }
 }
