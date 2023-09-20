@@ -420,6 +420,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPoint: {fileID: 1730389215}
   attackRange: 1
+  attackCooldown: 0.2
+  rollCooldown: 0.2
 --- !u!114 &540726876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,6 +438,7 @@ MonoBehaviour:
   airPenalty: 0.9
   accelerationForce: 400
   jumpForce: 14
+  unFreezeDelay: 0.15
 --- !u!1 &1452248173
 GameObject:
   m_ObjectHideFlags: 0

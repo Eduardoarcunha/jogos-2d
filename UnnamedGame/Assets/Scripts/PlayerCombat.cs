@@ -6,11 +6,15 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     public static event Action OnLightAttack;
+    public static event Action OnRoll;
 
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
+    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float rollCooldown = 0.5f;
 
     private bool isAttacking = false;
+    private bool isRolling = false;
     private bool isGrounded = false;
     private Animator animator;
 
@@ -27,9 +31,14 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && isGrounded)
+        // left click input
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded)
         {
             StartLightAttack();
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)
+        {
+            Roll();
         }
     }
 
@@ -54,9 +63,26 @@ public class PlayerCombat : MonoBehaviour
         AnimatorStateInfo currentAnimState = animator.GetCurrentAnimatorStateInfo(0);
         float timeRemaining = (1.0f - currentAnimState.normalizedTime) * currentAnimState.length;
 
-        yield return new WaitForSeconds(timeRemaining + 0.3f);
+        yield return new WaitForSeconds(timeRemaining + attackCooldown);
         isAttacking = false;
     }
+
+    private void Roll()
+    {
+        isRolling = true;
+        StartCoroutine(Rolling());   
+    }
+
+    private IEnumerator Rolling()
+    {
+        OnRoll?.Invoke();
+        animator.SetTrigger("rollTrigger");
+        AnimatorStateInfo currentAnimState = animator.GetCurrentAnimatorStateInfo(0);
+        float timeRemaining = (1.0f - currentAnimState.normalizedTime) * currentAnimState.length;
+        yield return new WaitForSeconds(timeRemaining + rollCooldown);
+        isRolling = false;
+    }
+
 
     private void OnDrawGizmosSelected()
     {

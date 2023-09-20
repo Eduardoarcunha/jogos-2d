@@ -14,10 +14,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float airPenalty = 0.9f;
     [SerializeField] private float accelerationForce = 400;
     [SerializeField] private float jumpForce = 14;
+    [SerializeField] private float unFreezeDelay = 0.3f;
 
     private float horizontalInput;
+    private bool verticalInput;
     private bool isGrounded = false;
     private bool isAttacking = false;
+    private bool isRolling = false;
     private Vector2 targetVelocity;
     private Vector3 velocity = Vector3.zero;
 
@@ -30,43 +33,35 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        PlayerCombat.OnLightAttack += FreezePlayer;
+        PlayerCombat.OnLightAttack += Attack;
+        PlayerCombat.OnRoll += Roll;
     }
 
     private void Update()
     {
-        CheckInput();
+        IsGroundedCheck();
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput |= Input.GetKeyDown(KeyCode.W);
         UpdateAnimator();
     }
 
     private void FixedUpdate()
     {
-        float moveInput = horizontalInput * accelerationForce * Time.fixedDeltaTime;
-        
-        if (!isAttacking)
+        if (!isAttacking && !isRolling)
         {
+            float moveInput = horizontalInput * accelerationForce * Time.fixedDeltaTime;
+
             if (!isGrounded)
             {
                 moveInput *= airPenalty;
             }
 
+            if (verticalInput && isGrounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            }
+
             Move(moveInput);
-        }
-    }
-
-    private void CheckInput()
-    {
-        IsGroundedCheck();
-        horizontalInput = Input.GetAxis("Horizontal");
-
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded && !isAttacking)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        }
-
-        if (!isGrounded && rb.velocity.y < 0)
-        {
-            animator.SetBool("isFalling", true);
         }
     }
 
@@ -78,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        if (horizontalInput != 0 && !isAttacking)
+        if (horizontalInput != 0 && !isAttacking && !isRolling)
         {
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
             animator.SetBool("isMoving", true);
@@ -86,6 +81,11 @@ public class PlayerController : MonoBehaviour
         else
         {
             animator.SetBool("isMoving", false);
+        }
+
+        if (!isGrounded && rb.velocity.y < 0)
+        {
+            animator.SetBool("isFalling", true);
         }
     }
 
@@ -97,24 +97,43 @@ public class PlayerController : MonoBehaviour
         {
             if (collider.gameObject != gameObject)
             {
-                isGrounded = true;
-                OnChangeGroundedState?.Invoke(true);
-                animator.SetBool("isGrounded", true);
-                animator.SetBool("isFalling", false);
+                if (!isGrounded) {
+                    verticalInput = false;
+                    isGrounded = true;
+                    OnChangeGroundedState?.Invoke(true);
+                    animator.SetBool("isGrounded", true);
+                    animator.SetBool("isFalling", false);
+                    
+                }
                 return;
             }
         }
-
-        animator.SetBool("isGrounded", false);
-        OnChangeGroundedState?.Invoke(false);
-        isGrounded = false;
+        if (isGrounded) {
+           animator.SetBool("isGrounded", false);
+            OnChangeGroundedState?.Invoke(false);
+            isGrounded = false;
+        }
     }
 
-    private void FreezePlayer()
+    private void Roll()
+    {
+        StopCoroutine(UnfreezePlayer());
+        isRolling = true;
+        rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * 12, 0);
+        FreezePlayer();
+        
+    }
+
+    private void Attack()
     {
         StopCoroutine(UnfreezePlayer());
         isAttacking = true;
         rb.velocity = Vector2.zero;
+        FreezePlayer();
+    }
+
+    private void FreezePlayer()
+    {
         StartCoroutine(UnfreezePlayer());
     }
 
@@ -122,8 +141,9 @@ public class PlayerController : MonoBehaviour
     {
         AnimatorStateInfo currentAnimState = animator.GetCurrentAnimatorStateInfo(0);
         float timeRemaining = (1.0f - currentAnimState.normalizedTime) * currentAnimState.length;
-        yield return new WaitForSeconds(timeRemaining + 0.3f);
+        yield return new WaitForSeconds(timeRemaining + unFreezeDelay);
         isAttacking = false;
+        isRolling = false;
     }
 
     private void OnDestroy()
