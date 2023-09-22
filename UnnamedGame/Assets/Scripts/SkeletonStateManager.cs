@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class SkeletonStateManager : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
-    private Rigidbody2D rb;
-    private Animator animator;
+    public GameObject player;
+    public Transform attackPoint;
+    public Transform raycastPoint;
 
-    [SerializeField] private Transform attackPoint;
-    [SerializeField] private Transform raycastPoint;
+    [HideInInspector] public Rigidbody2D rb { get; private set; }
+    [HideInInspector] public Animator animator { get; private set; }
 
     public float[] roamingPositions;
     public float speed = 2f;
@@ -27,46 +27,20 @@ public class SkeletonStateManager : MonoBehaviour
 
     private void Update()
     {
-        currentState.UpdateState(this);
+        currentState.UpdateState();
     }
 
     private void FixedUpdate()
     {
-        currentState.FixedUpdateState(this);
+        currentState.FixedUpdateState();
     }
 
     public void SwitchState(SkeletonBaseState newState)
     {
-        currentState.ExitState(this);
+        currentState.ExitState();
         currentState = newState;
         currentState.EnterState(this);
     }
-
-    public Rigidbody2D GetRigidbody()
-    {
-        return rb;
-    }
-
-    public Animator GetAnimator()
-    {
-        return animator;
-    }
-
-    public GameObject GetPlayer()
-    {
-        return player;
-    }
-
-    public Transform GetAttackPoint()
-    {
-        return attackPoint;
-    }
-
-    public Transform GetRaycastPoint()
-    {
-        return raycastPoint;
-    }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
