@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class SkeletonAwareState : SkeletonBaseState
 {
+    private SkeletonStateManager skel;
+
+    private Rigidbody2D rb;
+    private Animator animator;
+    private Transform raycastPoint;
+    private Transform attackPoint;
+    private GameObject player;
+
     private float sign;
     private bool playerInAttackRange;
     private bool isAttacking;
@@ -11,25 +19,35 @@ public class SkeletonAwareState : SkeletonBaseState
     private float attackCooldown = 2f;
     private float attackCooldownRemaining = 0f;
 
-    private int layerMask;
+    private int playerMask;
 
     
     public override void EnterState(SkeletonStateManager skeleton)
     {
-        layerMask = LayerMask.GetMask("Player");
+        skel = skeleton;
 
-        SkeletonAnimationEventsManager.OnEndAttack1Event += () => { attackCooldownRemaining = attackCooldown; isAttacking = false; };
+        rb = skeleton.GetRigidbody();
+        animator = skeleton.GetAnimator();
+        
+        raycastPoint = skeleton.GetRaycastPoint();
+        attackPoint = skeleton.GetAttackPoint();
+        
+        player = skeleton.GetPlayer();
+        playerMask = LayerMask.GetMask("Player");
+
+        SkeletonAnimationEventsManager.OnEndAttack1Event += OnHitAttack1;
+        SkeletonAnimationEventsManager.OnHitAttack1Event += OnEndAttack1;
     }
 
     public override void UpdateState(SkeletonStateManager skeleton)
     {
-        sign = Mathf.Sign(skeleton.player.transform.position.x - skeleton.transform.position.x);
+        sign = Mathf.Sign(player.transform.position.x - skeleton.transform.position.x);
 
         if (!isAttacking)
         {
             UpdateAnimator(skeleton);
         }
-        
+
     }
 
     public override void FixedUpdateState(SkeletonStateManager skeleton)
@@ -40,7 +58,8 @@ public class SkeletonAwareState : SkeletonBaseState
 
         if (playerInAttackRange && !isAttacking && attackCooldownRemaining <= 0f)
         {
-            AttackPlayer(skeleton);
+            isAttacking = true;
+            animator.SetTrigger("attackTrigger");
         }
         attackCooldownRemaining -= Time.fixedDeltaTime;
 
@@ -48,19 +67,20 @@ public class SkeletonAwareState : SkeletonBaseState
 
     public override void ExitState(SkeletonStateManager skeleton)
     {
-        SkeletonAnimationEventsManager.OnEndAttack1Event -= () => { attackCooldownRemaining = attackCooldown; isAttacking = false;};
+        SkeletonAnimationEventsManager.OnEndAttack1Event -= OnHitAttack1;
+        SkeletonAnimationEventsManager.OnHitAttack1Event -= OnEndAttack1;
     }
 
     void ChasePlayer(SkeletonStateManager skeleton)
     {
-        if (Mathf.Abs(skeleton.transform.position.x - skeleton.player.transform.position.x) > 4)
+        if (Mathf.Abs(skeleton.transform.position.x - player.transform.position.x) > 3)
         {
-            skeleton.rb.velocity = new Vector2(sign * skeleton.speed, 0);
+            rb.velocity = new Vector2(sign * skeleton.speed, 0);
             playerInAttackRange = false;
         }
         else
         {
-            skeleton.rb.velocity = new Vector2(0, 0);
+            rb.velocity = new Vector2(0, 0);
             playerInAttackRange = true;
         }
     }
@@ -68,28 +88,28 @@ public class SkeletonAwareState : SkeletonBaseState
     void UpdateAnimator(SkeletonStateManager skeleton)
     {
         skeleton.transform.localScale = new Vector3(sign * 1, 1, 1);
-        if (skeleton.rb.velocity.x != 0)
+        if (rb.velocity.x != 0)
         {
-            
-            skeleton.animator.SetBool("isMoving", true);
+            animator.SetBool("isMoving", true);
         }
         else
         {
-            skeleton.animator.SetBool("isMoving", false);
+            animator.SetBool("isMoving", false);
         }
     }
 
-    private void AttackPlayer(SkeletonStateManager skeleton)
+    private void OnHitAttack1()
     {
-
-        isAttacking = true;        
-        skeleton.animator.SetTrigger("attackTrigger");
-
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(skeleton.attackPoint.position, skeleton.attackRange, layerMask);
-        foreach (Collider2D enemy in hitEnemies)
+        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, 0.5f, playerMask);
+        foreach (Collider2D obj in hitObjects)
         {
-            Debug.Log("Hit " + enemy.name);
+            obj.GetComponent<PlayerCombat>().Hitted(skel.transform, 1);
         }
     }
 
+    private void OnEndAttack1()
+    {
+        attackCooldownRemaining = attackCooldown;
+        isAttacking = false;
+    }
 }

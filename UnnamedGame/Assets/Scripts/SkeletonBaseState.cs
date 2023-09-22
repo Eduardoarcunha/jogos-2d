@@ -9,4 +9,5 @@ public abstract class SkeletonBaseState
     public abstract void FixedUpdateState(SkeletonStateManager skeleton);
 
     public abstract void ExitState(SkeletonStateManager skeleton);
+    
 }

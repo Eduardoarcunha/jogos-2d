@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     private bool isAttacking = false;
     private bool isRolling = false;
+    private bool isHitted = false;
     private Vector2 targetVelocity;
     private Vector3 velocity = Vector3.zero;
 
@@ -39,6 +40,8 @@ public class PlayerController : MonoBehaviour
         PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttack;
         PlayerAnimationEventsManager.OnStartRollEvent += OnStartRoll;
         PlayerAnimationEventsManager.OnEndRollEvent += OnEndRoll;
+        PlayerAnimationEventsManager.OnHittedEvent += OnHitted;
+        PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHitted;
     }
 
     private void Update()
@@ -51,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isAttacking && !isRolling)
+        if (!isAttacking && !isRolling && !isHitted)
         {
             float moveInput = horizontalInput * accelerationForce * Time.fixedDeltaTime;
 
@@ -77,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        if (horizontalInput != 0 && !isAttacking && !isRolling)
+        if (horizontalInput != 0 && !isAttacking && !isRolling && !isHitted)
         {
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
             animator.SetBool("isMoving", true);
@@ -146,11 +149,25 @@ public class PlayerController : MonoBehaviour
         isRolling = false;
     }
 
+    private void OnHitted()
+    {
+        isAttacking = false;
+        isRolling = false;
+        isHitted = true;
+    }
+
+    private void OnEndHitted()
+    {
+        isHitted = false;
+    }
+
     private void OnDestroy()
     {
         PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
         PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
         PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
         PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
+        PlayerAnimationEventsManager.OnHittedEvent -= OnHitted;
+        PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHitted;
     }
 }

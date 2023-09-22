@@ -2,19 +2,20 @@ using UnityEngine;
 
 public class SkeletonStateManager : MonoBehaviour
 {
-    public GameObject player;
-    public Rigidbody2D rb;
-    public Animator animator;
+    [SerializeField] private GameObject player;
+    private Rigidbody2D rb;
+    private Animator animator;
 
-    public Transform attackPoint;
-    public Transform raycastPoint;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private Transform raycastPoint;
 
     public float[] roamingPositions;
     public float speed = 2f;
-
     public float attackRange = 0.5f;
 
     private SkeletonBaseState currentState;
+    public SkeletonUnawareState unawareState = new SkeletonUnawareState();
+    public SkeletonAwareState awareState = new SkeletonAwareState();
 
     private void Awake()
     {
@@ -39,6 +40,31 @@ public class SkeletonStateManager : MonoBehaviour
         currentState.ExitState(this);
         currentState = newState;
         currentState.EnterState(this);
+    }
+
+    public Rigidbody2D GetRigidbody()
+    {
+        return rb;
+    }
+
+    public Animator GetAnimator()
+    {
+        return animator;
+    }
+
+    public GameObject GetPlayer()
+    {
+        return player;
+    }
+
+    public Transform GetAttackPoint()
+    {
+        return attackPoint;
+    }
+
+    public Transform GetRaycastPoint()
+    {
+        return raycastPoint;
     }
 
     private void OnDrawGizmosSelected()
