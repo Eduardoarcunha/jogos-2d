@@ -35,7 +35,11 @@ public class PlayerController : MonoBehaviour
 
         animator = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        SubscribeToEvents();
+    }
 
+    private void SubscribeToEvents()
+    {
         PlayerAnimationEventsManager.OnStartLightAttackEvent += OnStartLightAttack;
         PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttack;
         PlayerAnimationEventsManager.OnStartRollEvent += OnStartRoll;
@@ -44,17 +48,34 @@ public class PlayerController : MonoBehaviour
         PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHitted;
     }
 
+    private void UnsubscribeFromEvents()
+    {
+        PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
+        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
+        PlayerAnimationEventsManager.OnHittedEvent -= OnHitted;
+        PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHitted;
+    }
+
+    private bool CanMoveOrAct()
+    {
+        return !isAttacking && !isRolling && !isHitted;
+    }
+
     private void Update()
     {
         IsGroundedCheck();
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput |= Input.GetKeyDown(KeyCode.W);
+
         UpdateAnimator();
+        
     }
 
     private void FixedUpdate()
     {
-        if (!isAttacking && !isRolling && !isHitted)
+        if (CanMoveOrAct())
         {
             float moveInput = horizontalInput * accelerationForce * Time.fixedDeltaTime;
 
@@ -163,11 +184,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
-        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
-        PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
-        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
-        PlayerAnimationEventsManager.OnHittedEvent -= OnHitted;
-        PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHitted;
+        UnsubscribeFromEvents();
     }
 }

@@ -321,7 +321,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.14, y: 0.04, z: 0}
-  m_LocalScale: {x: 0.9963, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1452248174}
@@ -369,10 +369,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPoint: {fileID: 1730389215}
   attackRange: 1
+  damage: 2
+  knockbackForce: {x: 6, y: 4}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 128
-  knockbackForce: {x: 6, y: 4}
 --- !u!114 &540726876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,6 +464,7 @@ GameObject:
   - component: {fileID: 827717757}
   - component: {fileID: 827717760}
   - component: {fileID: 827717761}
+  - component: {fileID: 827717762}
   m_Layer: 7
   m_Name: Skeleton
   m_TagString: Enemy
@@ -647,11 +649,15 @@ MonoBehaviour:
   player: {fileID: 540726868}
   attackPoint: {fileID: 1816775182}
   raycastPoint: {fileID: 2064665325}
+  flashEffect: {fileID: 827717762}
+  gameObjectId: 0
   roamingPositions:
   - -3
   - 3
   speed: 2
   attackRange: 0.5
+  life: 10
+  isDead: 0
 --- !u!114 &827717761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,6 +670,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb25b7873a704c429fe11ba01cf1cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &827717762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827717752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51174adaabb4eb428def3944c367fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: 07adf1bdd49bad74b89dc4da8b6699b4, type: 2}
+  duration: 0.3
 --- !u!1 &1452248173
 GameObject:
   m_ObjectHideFlags: 0

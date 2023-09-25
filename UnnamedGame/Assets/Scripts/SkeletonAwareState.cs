@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class SkeletonAwareState : SkeletonBaseState
 {
-    private SkeletonStateManager skeleton;
-
     private Transform raycastPoint;
     private Transform attackPoint;
     private GameObject player;
@@ -19,10 +17,9 @@ public class SkeletonAwareState : SkeletonBaseState
     private bool playerInAttackRange;
     private bool isAttacking;
     
-    public override void EnterState(SkeletonStateManager skelManager)
+    public override void EnterState()
     {
-        skeleton = skelManager;
-        
+
         raycastPoint = skeleton.raycastPoint;
         attackPoint = skeleton.attackPoint;
         
@@ -31,12 +28,14 @@ public class SkeletonAwareState : SkeletonBaseState
 
         SkeletonAnimationEventsManager.OnEndAttack1Event += OnHitAttack1;
         SkeletonAnimationEventsManager.OnHitAttack1Event += OnEndAttack1;
+
+        PlayerCombat.OnHitEnemyEvent += TakeDamage;
     }
 
     public override void UpdateState()
     {
         signPlayerToSkeleton = Mathf.Sign(player.transform.position.x - skeleton.transform.position.x);
-        if (!isAttacking)
+        if (!isAttacking & !skeleton.isDead)
         {
             UpdateAnimator();
         }
@@ -44,11 +43,11 @@ public class SkeletonAwareState : SkeletonBaseState
 
     public override void FixedUpdateState()
     {
-        if (!isAttacking){
+        if (!isAttacking && !skeleton.isDead){
             ChasePlayer();
         }
 
-        if (playerInAttackRange && !isAttacking && attackCooldownRemaining <= 0f)
+        if (playerInAttackRange && !isAttacking && attackCooldownRemaining <= 0f && !skeleton.isDead)
         {
             isAttacking = true;
             skeleton.animator.SetTrigger("attackTrigger");
@@ -60,12 +59,18 @@ public class SkeletonAwareState : SkeletonBaseState
     {
         SkeletonAnimationEventsManager.OnEndAttack1Event -= OnHitAttack1;
         SkeletonAnimationEventsManager.OnHitAttack1Event -= OnEndAttack1;
+        PlayerCombat.OnHitEnemyEvent -= TakeDamage;
     }
 
-    public override void TakeDamage(int damage)
+    public override void OnDeath()
     {
-        return;
+        skeleton.rb.velocity = Vector2.zero;
+        skeleton.rb.gravityScale = 0;
+        skeleton.boxCollider.enabled = false;
+        skeleton.isDead = true;
+        skeleton.animator.SetTrigger("deathTrigger");
     }
+
     
     void ChasePlayer()
     {

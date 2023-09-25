@@ -1,22 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class SkeletonUnawareState : SkeletonBaseState
 {
-    private SkeletonStateManager skeleton;
     private Transform raycastPoint;
 
     private int playerMask;
     private int roamingPositionIdx = 0;
     private float roamingPosition;
 
-    public override void EnterState(SkeletonStateManager skelManager)
+    public override void EnterState()
     {
         Debug.Log("Skeleton is unaware of player");
-        skeleton = skelManager;
         raycastPoint = skeleton.raycastPoint;
 
         playerMask = LayerMask.GetMask("Player");
         roamingPosition = skeleton.roamingPositions[roamingPositionIdx];
+
+        PlayerCombat.OnHitEnemyEvent += TakeDamage;
     }
 
     public override void UpdateState()
@@ -39,11 +42,17 @@ public class SkeletonUnawareState : SkeletonBaseState
 
     public override void ExitState()
     {
+        PlayerCombat.OnHitEnemyEvent -= TakeDamage;
     }
 
-    public override void TakeDamage(int damage)
+
+    public override void OnDeath()
     {
-        return;
+        skeleton.rb.velocity = Vector2.zero;
+        skeleton.rb.gravityScale = 0;
+        skeleton.boxCollider.enabled = false;
+        skeleton.isDead = true;
+        skeleton.animator.SetTrigger("deathTrigger");
     }
 
     private void SearchPlayer()
@@ -65,7 +74,6 @@ public class SkeletonUnawareState : SkeletonBaseState
         }
         else
         {
-            skeleton.rb.velocity = new Vector2(Mathf.Sign(roamingPosition - skeleton.transform.position.x), 0);
             skeleton.transform.localScale = new Vector3(Mathf.Sign(roamingPosition - skeleton.transform.position.x), 1, 1);
             skeleton.animator.SetBool("isMoving", true);
         }

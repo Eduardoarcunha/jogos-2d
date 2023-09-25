@@ -5,10 +5,15 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
+    public static event Action<int, int> OnHitEnemyEvent;
+
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
-    [SerializeField] private LayerMask enemyLayers;
+    [SerializeField] private int damage = 2;
     [SerializeField] private Vector2 knockbackForce;
+
+
+    [SerializeField] private LayerMask enemyLayers;
 
     private Rigidbody2D rb;
 
@@ -22,30 +27,38 @@ public class PlayerCombat : MonoBehaviour
     {   
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        SubscribeToEvents();
+    }
 
+    private void SubscribeToEvents()
+    {
         PlayerController.OnChangeGroundedState += HandleChangeGroundedState;
         PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttackCombat;
         PlayerAnimationEventsManager.OnEndRollEvent += OnEndRollCombat;
         PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHittedCombat;
     }
 
-    private void HandleChangeGroundedState(bool isGroundedState)
+    private void UnsubscribeFromEvents()
     {
-        isGrounded = isGroundedState;
+        PlayerController.OnChangeGroundedState -= HandleChangeGroundedState;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttackCombat;
+        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRollCombat;
+        PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHittedCombat;
+    }
+
+    private bool CanRollOrAttack()
+    {
+        return !isAttacking && !isRolling && !isHitted && isGrounded;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && !isHitted)
+        if (CanRollOrAttack())
         {
-            StartLightAttack();
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded && !isHitted)
-        {
-            Roll();
+            if (Input.GetMouseButtonDown(0)) StartLightAttack();
+            if (Input.GetKeyDown(KeyCode.Space)) Roll();
         }
     }
-
 
     private void StartLightAttack()
     {
@@ -55,7 +68,7 @@ public class PlayerCombat : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
-            Debug.Log("Hit " + enemy.name);
+            if (enemy.CompareTag("Enemy")) OnHitEnemyEvent?.Invoke(enemy.gameObject.GetInstanceID(), damage);
         }
     }
      
@@ -63,7 +76,6 @@ public class PlayerCombat : MonoBehaviour
     {
         isAttacking = false;
     }
-
 
     private void Roll()
     {
@@ -78,18 +90,15 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && !isHitted)
-        {
-            Debug.Log("Player hitted");
-            Hitted(collision.gameObject.transform, 1);
-
-        }
+        if (collision.gameObject.CompareTag("Enemy") && !isHitted) Hitted(collision.gameObject.transform, 1);
     }
 
     public void Hitted(Transform enemyPos, int damage)
     {
         animator.SetBool("isHitted", true);
         isHitted = true;
+        isAttacking = false;
+        isRolling = false;
 
         float knockbackDirectionSign = Mathf.Sign(transform.position.x - enemyPos.position.x);
         Vector2 knockbackDirection = new Vector2 (knockbackDirectionSign, 1);
@@ -110,11 +119,13 @@ public class PlayerCombat : MonoBehaviour
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 
+    private void HandleChangeGroundedState(bool isGroundedState)
+    {
+        isGrounded = isGroundedState;
+    }
+
     private void OnDestroy()
     {
-        PlayerController.OnChangeGroundedState -= HandleChangeGroundedState;
-        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttackCombat;
-        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRollCombat;
-        PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHittedCombat;
+        UnsubscribeFromEvents();
     }
 }
