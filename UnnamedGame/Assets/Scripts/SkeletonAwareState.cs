@@ -76,7 +76,7 @@ public class SkeletonAwareState : SkeletonBaseState
     {
         if (Mathf.Abs(skeleton.transform.position.x - player.transform.position.x) > 3)
         {
-            skeleton.rb.velocity = new Vector2(signPlayerToSkeleton * skeleton.speed, 0);
+            skeleton.rb.velocity = new Vector2(signPlayerToSkeleton * skeleton.speed, skeleton.rb.velocity.y);
             playerInAttackRange = false;
         }
         else

@@ -6,7 +6,9 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     public static event Action<int, int> OnHitEnemyEvent;
+    public static event Action OnDeathEvent;
 
+    [SerializeField] private int life = 5;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private int damage = 2;
@@ -21,6 +23,7 @@ public class PlayerCombat : MonoBehaviour
     private bool isRolling = false;
     private bool isGrounded = false;
     private bool isHitted = false;
+    private bool isDead = false;
     private Animator animator;
 
     private void Start()
@@ -48,7 +51,7 @@ public class PlayerCombat : MonoBehaviour
 
     private bool CanRollOrAttack()
     {
-        return !isAttacking && !isRolling && !isHitted && isGrounded;
+        return !isAttacking && !isRolling && !isHitted && isGrounded && !isDead;
     }
 
     private void Update()
@@ -63,7 +66,7 @@ public class PlayerCombat : MonoBehaviour
     private void StartLightAttack()
     {
         isAttacking = true;        
-        animator.SetTrigger("attackTrigger");
+        animator.SetTrigger("Attack");
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
@@ -80,7 +83,7 @@ public class PlayerCombat : MonoBehaviour
     private void Roll()
     {
         isRolling = true;
-        animator.SetTrigger("rollTrigger");
+        animator.SetTrigger("Roll");
     }
 
     private void OnEndRollCombat()
@@ -95,14 +98,24 @@ public class PlayerCombat : MonoBehaviour
 
     public void Hitted(Transform enemyPos, int damage)
     {
-        animator.SetBool("isHitted", true);
-        isHitted = true;
-        isAttacking = false;
-        isRolling = false;
+        if (isDead) return;
+        life -= damage;
+        if (life <= 0) {
+            OnDeathEvent?.Invoke();
+            animator.SetTrigger("Death");
+            isDead = true;
+            isAttacking = false;
+            isRolling = false;
+        } else {
+            animator.SetTrigger("Hitted");
+            isHitted = true;
+            isAttacking = false;
+            isRolling = false;
+        }
 
+        
         float knockbackDirectionSign = Mathf.Sign(transform.position.x - enemyPos.position.x);
         Vector2 knockbackDirection = new Vector2 (knockbackDirectionSign, 1);
-
         rb.velocity = Vector2.zero;
         rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);              
     }
@@ -110,7 +123,6 @@ public class PlayerCombat : MonoBehaviour
     private void OnEndHittedCombat()
     {
         isHitted = false;
-        animator.SetBool("isHitted", false);
     }
 
 

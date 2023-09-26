@@ -36,7 +36,7 @@ public class SkeletonUnawareState : SkeletonBaseState
         }
         else
         {
-            skeleton.rb.velocity = new Vector2(Mathf.Sign(roamingPosition - skeleton.transform.position.x) * skeleton.speed, 0);
+            skeleton.rb.velocity = new Vector2(Mathf.Sign(roamingPosition - skeleton.transform.position.x) * skeleton.speed, skeleton.rb.velocity.y);
         }
     }
 
