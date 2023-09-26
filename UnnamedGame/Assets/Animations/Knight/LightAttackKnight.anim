@@ -22,17 +22,17 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: -667290872, guid: 5d6abb32786003142a4962ffa50d26c6, type: 3}
-    - time: 0.12
+    - time: 0.09
       value: {fileID: -847801329, guid: 5d6abb32786003142a4962ffa50d26c6, type: 3}
-    - time: 0.24
+    - time: 0.18
       value: {fileID: -1883109931, guid: 5d6abb32786003142a4962ffa50d26c6, type: 3}
-    - time: 0.36
+    - time: 0.28
       value: {fileID: 1958125159, guid: 5d6abb32786003142a4962ffa50d26c6, type: 3}
-    - time: 0.48
+    - time: 0.37
       value: {fileID: -1589492300, guid: 5d6abb32786003142a4962ffa50d26c6, type: 3}
-    - time: 0.6
+    - time: 0.42
       value: {fileID: 2100828368, guid: 5d6abb32786003142a4962ffa50d26c6, type: 3}
-    - time: 0.72
+    - time: 0.46
       value: {fileID: 2100828368, guid: 5d6abb32786003142a4962ffa50d26c6, type: 3}
     attribute: m_Sprite
     path: 
@@ -68,7 +68,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.73
+    m_StopTime: 0.5
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -95,7 +95,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.72
+  - time: 0.5
     functionName: OnAnimationEndLightAttack
     data: 
     objectReferenceParameter: {fileID: 0}

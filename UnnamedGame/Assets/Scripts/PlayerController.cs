@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     private bool isAttacking = false;
     private bool isRolling = false;
+    private bool isHitted = false;
+    private bool isDead = false;
     private Vector2 targetVelocity;
     private Vector3 velocity = Vector3.zero;
 
@@ -34,11 +36,34 @@ public class PlayerController : MonoBehaviour
 
         animator = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        SubscribeToEvents();
+    }
 
+    private void SubscribeToEvents()
+    {
         PlayerAnimationEventsManager.OnStartLightAttackEvent += OnStartLightAttack;
         PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttack;
         PlayerAnimationEventsManager.OnStartRollEvent += OnStartRoll;
         PlayerAnimationEventsManager.OnEndRollEvent += OnEndRoll;
+        PlayerAnimationEventsManager.OnHittedEvent += OnHitted;
+        PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHitted;
+        PlayerCombat.OnDeathEvent += OnDeath;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
+        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
+        PlayerAnimationEventsManager.OnHittedEvent -= OnHitted;
+        PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHitted;
+        PlayerCombat.OnDeathEvent -= OnDeath;
+    }
+
+    private bool CanMoveOrAct()
+    {
+        return !isAttacking && !isRolling && !isHitted && !isDead;
     }
 
     private void Update()
@@ -46,12 +71,13 @@ public class PlayerController : MonoBehaviour
         IsGroundedCheck();
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput |= Input.GetKeyDown(KeyCode.W);
+
         UpdateAnimator();
     }
 
     private void FixedUpdate()
     {
-        if (!isAttacking && !isRolling)
+        if (CanMoveOrAct())
         {
             float moveInput = horizontalInput * accelerationForce * Time.fixedDeltaTime;
 
@@ -77,9 +103,10 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        if (horizontalInput != 0 && !isAttacking && !isRolling)
+        if (horizontalInput != 0 && !isAttacking && !isRolling && !isHitted && !isDead)
         {
-            transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
+            int sign = Mathf.Sign(horizontalInput) > 0 ? 1 : -1;
+            transform.localScale = new Vector3(sign * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             animator.SetBool("isMoving", true);
         }
         else
@@ -87,7 +114,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isMoving", false);
         }
 
-        if (!isGrounded && rb.velocity.y < 0)
+        if (!isGrounded && rb.velocity.y < 0 && !isDead && !isHitted)
         {
             animator.SetBool("isFalling", true);
         }
@@ -105,9 +132,13 @@ public class PlayerController : MonoBehaviour
                     verticalInput = false;
                     isGrounded = true;
                     OnChangeGroundedState?.Invoke(true);
-                    animator.SetBool("isGrounded", true);
-                    animator.SetBool("isFalling", false);
-                    
+
+                    if (isDead) {
+                        rb.velocity = Vector3.zero;
+                    } else {
+                        animator.SetBool("isGrounded", true);
+                        animator.SetBool("isFalling", false);
+                    }
                 }
                 return;
             }
@@ -146,11 +177,28 @@ public class PlayerController : MonoBehaviour
         isRolling = false;
     }
 
+    private void OnHitted()
+    {
+        isAttacking = false;
+        isRolling = false;
+        isHitted = true;
+    }
+
+    private void OnEndHitted()
+    {
+        isHitted = false;
+    }
+
+    private void OnDeath()
+    {
+        isDead = true;
+        isAttacking = false;
+        isRolling = false;
+        isHitted = false;
+    }
+
     private void OnDestroy()
     {
-        PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
-        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
-        PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
-        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
+        UnsubscribeFromEvents();
     }
 }
