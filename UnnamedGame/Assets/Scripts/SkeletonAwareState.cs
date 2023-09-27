@@ -19,6 +19,7 @@ public class SkeletonAwareState : SkeletonBaseState
     
     public override void EnterState()
     {
+        Debug.Log("Skeleton is aware of player");
 
         raycastPoint = skeleton.raycastPoint;
         attackPoint = skeleton.attackPoint;
@@ -74,7 +75,7 @@ public class SkeletonAwareState : SkeletonBaseState
     
     void ChasePlayer()
     {
-        if (Mathf.Abs(skeleton.transform.position.x - player.transform.position.x) > 3)
+        if (Mathf.Abs(skeleton.transform.position.x - player.transform.position.x) > 1)
         {
             skeleton.rb.velocity = new Vector2(signPlayerToSkeleton * skeleton.speed, skeleton.rb.velocity.y);
             playerInAttackRange = false;
@@ -88,7 +89,7 @@ public class SkeletonAwareState : SkeletonBaseState
 
     void UpdateAnimator()
     {
-        skeleton.transform.localScale = new Vector3(signPlayerToSkeleton * 1, 1, 1);
+        skeleton.transform.localScale = new Vector3(signPlayerToSkeleton * Mathf.Abs(skeleton.transform.localScale.x), skeleton.transform.localScale.y, skeleton.transform.localScale.z);
         if (skeleton.rb.velocity.x != 0)
         {
             skeleton.animator.SetBool("isMoving", true);

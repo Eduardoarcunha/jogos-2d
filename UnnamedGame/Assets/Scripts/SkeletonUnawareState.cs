@@ -74,7 +74,8 @@ public class SkeletonUnawareState : SkeletonBaseState
         }
         else
         {
-            skeleton.transform.localScale = new Vector3(Mathf.Sign(roamingPosition - skeleton.transform.position.x), 1, 1);
+            int sign = Mathf.Sign(roamingPosition - skeleton.transform.position.x) > 0 ? 1 : -1;
+            skeleton.transform.localScale = new Vector3(sign * Mathf.Abs(skeleton.transform.localScale.x), skeleton.transform.localScale.y, skeleton.transform.localScale.z);
             skeleton.animator.SetBool("isMoving", true);
         }
     }

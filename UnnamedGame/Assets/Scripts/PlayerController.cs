@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float airPenalty = 0.9f;
     [SerializeField] private float accelerationForce = 400;
+    [SerializeField] private float rollForce = 10;
     [SerializeField] private float jumpForce = 14;
     [SerializeField] private float gravityScale = 3.0f;
 
@@ -73,6 +74,7 @@ public class PlayerController : MonoBehaviour
         verticalInput |= Input.GetKeyDown(KeyCode.W);
 
         UpdateAnimator();
+        // Debug.Log("isAttacking: " + isAttacking + ", isRolling: " + isRolling + ", isHitted: " + isHitted + ", isDead: " + isDead);
     }
 
     private void FixedUpdate()
@@ -114,7 +116,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isMoving", false);
         }
 
-        if (!isGrounded && rb.velocity.y < 0 && !isDead && !isHitted)
+        if (!isGrounded && rb.velocity.y < 0 && !isDead && !isHitted && !isRolling)
         {
             animator.SetBool("isFalling", true);
         }
@@ -132,7 +134,7 @@ public class PlayerController : MonoBehaviour
                     verticalInput = false;
                     isGrounded = true;
                     OnChangeGroundedState?.Invoke(true);
-
+                    
                     if (isDead) {
                         rb.velocity = Vector3.zero;
                     } else {
@@ -164,16 +166,16 @@ public class PlayerController : MonoBehaviour
     private void OnStartRoll()
     {
         isRolling = true;
-        rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * 12, 0);
-        coll.enabled = false;
-        rb.gravityScale = 0;
+        rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * rollForce, 0);
+        // change layer to ignore collision with enemies
+        gameObject.layer = LayerMask.NameToLayer("PlayerRolling");
+        // rb.gravityScale = 0;
         
     }
 
     private void OnEndRoll()
     {
-        coll.enabled = true;
-        rb.gravityScale = gravityScale;
+        gameObject.layer = LayerMask.NameToLayer("Player");
         isRolling = false;
     }
 
@@ -188,6 +190,7 @@ public class PlayerController : MonoBehaviour
     {
         isHitted = false;
     }
+
 
     private void OnDeath()
     {
