@@ -34,10 +34,12 @@ public abstract class RivalBaseState
 
     public virtual void OnDeath()
     {
+        Debug.Log("Rival is dead");
         rival.rb.velocity = Vector2.zero;
         rival.rb.gravityScale = 0;
         rival.boxCollider.enabled = false;
         rival.isDead = true;
+        // rival.animator.SetBool("isDead", true);
         rival.animator.SetTrigger("deathTrigger");
     }
 

@@ -6,88 +6,165 @@ public class RivalPhaseOneState : RivalBaseState
 {
     private GameObject player;
     private float signRivalToPlayer;
-    private currentStateEnum currentState;
+    private CurrentStateEnum currentState;
+
+    private int attackId;
+
+    private Dictionary<int, int> attackIdToDamage = new Dictionary<int, int>()
+    {
+        {1, 1},
+        {2, 2},
+        {3, 2},
+        {4, 3}
+    };
 
     public override void EnterState()
     {
-        Debug.Log("Rival is in phase one");
         player = rival.player;
+        
+        PlayerCombat.OnHitEnemyEvent += onHitted;
+        PlayerCombat.OnDeathEvent += OnPlayerDeath;
 
-        RivalAnimationEventsManager.OnEndAttack2Event += () => { ChangeState(currentStateEnum.stay); };
-        RivalAnimationEventsManager.OnEndAttack3Event += () => { ChangeState(currentStateEnum.stay); };
+        RivalAnimationEventsManager.OnAttackHitEvent += OnHitAttack;
+        RivalAnimationEventsManager.OnEndAttack1Event += OnEndAttack1;
+        RivalAnimationEventsManager.OnEndAttack2Event += OnEndAttack2;
+        RivalAnimationEventsManager.OnEndAttack3Event += OnEndAttack3;
+        RivalAnimationEventsManager.OnEndAttack4Event += OnEndAttack4;
+        RivalAnimationEventsManager.OnFlipEvent += OnFlip;
     }
 
     public override void UpdateState()
     {
-        Debug.Log(currentState);   
+        if (rival.playerIsDead)
+        {
+            ChangeState(CurrentStateEnum.Winner);
+            return;
+        }
+        if (rival.isDead) return;
         UpdateAnimator();
+        EvaluateAndChangeStateBasedOnDistance();
+        UpdateCooldowns();
+    }
 
-        if (currentState != currentStateEnum.attack)
-        {    
-            bool inRange = Mathf.Abs(rival.transform.position.x - player.transform.position.x) < rival.attackRange;
-            bool inSafeDistance = Mathf.Abs(rival.transform.position.x - player.transform.position.x) > rival.safeDistance;
-            Debug.Log(inRange);
-            if (inRange)
+    private void EvaluateAndChangeStateBasedOnDistance()
+    {
+        float distanceToPlayer = Mathf.Abs(rival.transform.position.x - player.transform.position.x);
+        bool inCloseRange = distanceToPlayer < rival.closeAttackRange;
+        bool inLongRange = distanceToPlayer > rival.longAttackRange;
+        bool inSafeDistance = distanceToPlayer > rival.safeDistance;
+
+        if (currentState == CurrentStateEnum.Attack || currentState == CurrentStateEnum.Death) return;
+
+        if (inCloseRange)
+        {
+            HandleAttackInRange();
+        }
+        else
+        {
+            HandleAttackOutOfRange(inSafeDistance, inLongRange);
+        }
+    }
+
+    private void HandleAttackInRange()
+    {
+        if (AttackIsNotOnCooldown(rival.attack2CooldownRemaining, rival.attack3CooldownRemaining) )
+        {
+            if (rival.allAttacksCooldownRemaining <= 0)
             {
-                if (rival.attack2CooldownRemaining <= 0 || rival.attack3CooldownRemaining <= 0)
-                {
-                    Debug.Log("Attacked 2 or 3");
-                    int random = Random.Range(0, 2);
-                    if (random == 0)
-                    {
-                        ChangeState(currentStateEnum.attack);
-                        rival.animator.SetTrigger("attack2Trigger");
-                        rival.attack2CooldownRemaining = rival.attack2Cooldown;
-                    }
-                    else
-                    {
-                        ChangeState(currentStateEnum.attack);
-                        rival.animator.SetTrigger("attack3Trigger");
-                        rival.attack3CooldownRemaining = rival.attack3Cooldown;   
-                    }
-                }
-                else
-                {
-                    Debug.Log("Run away player");
-                    ChangeState(currentStateEnum.runAway);
-                }
+                Attack("attack2Trigger", "attack3Trigger", ref rival.attack2CooldownRemaining, ref rival.attack3CooldownRemaining, rival.attack2Cooldown, rival.attack3Cooldown, 2, 3);
+            } 
+            else 
+            {
+                ChangeState(CurrentStateEnum.Stay);
+            }
+        }
+        else if (AttackIsNotOnCooldown(rival.attack1CooldownRemaining, rival.attack4CooldownRemaining))
+        {
+            ChangeState(CurrentStateEnum.RunAway);
+        } 
+        else 
+        {
+            ChangeState(CurrentStateEnum.Stay);
+        }
+    }
+    
+    private void HandleAttackOutOfRange(bool inSafeDistance, bool inLongRange)
+    {
+        if (inLongRange && AttackIsNotOnCooldown(rival.attack1CooldownRemaining, rival.attack4CooldownRemaining))
+        {
+            if (rival.allAttacksCooldownRemaining <= 0)
+            {
+                Attack("attack1Trigger", "attack4Trigger", ref rival.attack1CooldownRemaining, ref rival.attack4CooldownRemaining, rival.attack1Cooldown, rival.attack4Cooldown, 1, 4);
             }
             else
             {
-                if (rival.attack1CooldownRemaining <= 0 || rival.attack4CooldownRemaining <= 0)
-                {
-                    Debug.Log("Attacked 1 or 4");
-                    int random = Random.Range(0, 2);
-                    if (random == 0)
-                    {
-                        // rival.animator.SetTrigger("attack1Trigger");
-                        rival.attack1CooldownRemaining = rival.attack1Cooldown;
-                    }
-                    else
-                    {
-                        // rival.animator.SetTrigger("attack4Trigger");
-                        rival.attack4CooldownRemaining = rival.attack4Cooldown;
-                    }
-                }
-                else if (rival.attack2CooldownRemaining <= 0 || rival.attack3CooldownRemaining <= 0)
-                {
-                    Debug.Log("Run towards player");
-                    ChangeState(currentStateEnum.runTowards);
-                }
-                else if (inSafeDistance)
-                {
-                    Debug.Log("Safe Distance");
-                    ChangeState(currentStateEnum.stay);
-                }
-                else
-                {
-                    Debug.Log("Run away player");
-                    ChangeState(currentStateEnum.runAway);
-                }
+                ChangeState(CurrentStateEnum.Stay);
             }
         }
+        else if (AttackIsNotOnCooldown(rival.attack2CooldownRemaining, rival.attack3CooldownRemaining))
+        {
+            ChangeState(CurrentStateEnum.RunTowards);
+        }
+        else if (inSafeDistance)
+        {
+            ChangeState(CurrentStateEnum.Stay);
+        }
+        else
+        {
+            ChangeState(CurrentStateEnum.RunAway);
+        }
+    }
 
-        UpdateCooldowns();
+    private bool AttackIsNotOnCooldown(float cooldown1, float cooldown2)
+    {
+        return cooldown1 <= 0 || cooldown2 <= 0;
+    }
+
+    private void Attack(string trigger1, string trigger2, ref float cooldownRemaining1, ref float cooldownRemaining2, float cooldown1, float cooldown2, int attackId1, int attackId2)
+    {
+        ChangeState(CurrentStateEnum.Attack);
+        if (cooldownRemaining1 <= 0 && cooldownRemaining2 > 0)
+        {
+            TriggerAttack(trigger1, ref cooldownRemaining1, cooldown1);
+            attackId = attackId1;
+        }
+        else if (cooldownRemaining1 > 0 && cooldownRemaining2 <= 0)
+        {
+            TriggerAttack(trigger2, ref cooldownRemaining2, cooldown2);
+            attackId = attackId2;
+        }
+        else
+        {
+            int random = Random.Range(0, 2);
+            if (random == 0)
+            {
+                TriggerAttack(trigger1, ref cooldownRemaining1, cooldown1);
+                attackId = attackId1;
+            }
+            else
+            {
+                TriggerAttack(trigger2, ref cooldownRemaining2, cooldown2);
+                attackId = attackId2;
+            }
+        }
+    }
+
+    private void OnHitAttack()
+    {
+        Debug.Log("OnHitAttack");
+        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(rival.attackPoint.position, rival.attackHitBox, rival.playerMask);
+        foreach (Collider2D obj in hitObjects)
+        {
+            obj.GetComponent<PlayerCombat>().Hitted(rival.transform, attackIdToDamage[attackId]);
+        }
+        return;
+    }
+    
+    private void TriggerAttack(string trigger, ref float cooldownRemaining, float cooldown)
+    {
+        rival.animator.SetTrigger(trigger);
+        cooldownRemaining = cooldown;
+        rival.allAttacksCooldownRemaining = rival.allAttacksCooldown;
     }
 
     public override void FixedUpdateState()
@@ -97,75 +174,62 @@ public class RivalPhaseOneState : RivalBaseState
 
     public override void ExitState()
     {
-        Debug.Log("Rival is in phase one");
-        RivalAnimationEventsManager.OnEndAttack2Event -= () => { ChangeState(currentStateEnum.stay); };
-        RivalAnimationEventsManager.OnEndAttack3Event -= () => { ChangeState(currentStateEnum.stay); };
+        PlayerCombat.OnHitEnemyEvent -= onHitted;
+
+        RivalAnimationEventsManager.OnEndAttack1Event += OnEndAttack1;
+        RivalAnimationEventsManager.OnEndAttack1Event += OnEndAttack1;
+        RivalAnimationEventsManager.OnEndAttack2Event += OnEndAttack2;
+        RivalAnimationEventsManager.OnEndAttack3Event += OnEndAttack3;
+        RivalAnimationEventsManager.OnEndAttack4Event += OnEndAttack4;
     }
 
-    public enum currentStateEnum
+    public enum CurrentStateEnum
     {
-        runAway,
-        stay,
-        runTowards,
-        attack
+        RunAway,
+        Stay,
+        RunTowards,
+        Attack,
+        Death,
+        Winner
     }
 
-    private void ChangeState(currentStateEnum newState)
+    private void ChangeState(CurrentStateEnum newState)
     {
         if (currentState == newState) return;
 
         currentState = newState;
-
-        switch (currentState)
-        {
-            case currentStateEnum.runAway:
-                rival.animator.SetBool("isMoving", true);
-                break;
-            case currentStateEnum.stay:
-                rival.animator.SetBool("isMoving", false);
-                break;
-            case currentStateEnum.runTowards:
-                rival.animator.SetBool("isMoving", true);
-                break;
-            case currentStateEnum.attack:
-                rival.animator.SetBool("isMoving", false);
-                break;
+        if (currentState == CurrentStateEnum.Winner){
+            rival.animator.SetTrigger("winnerTrigger");
+            return;
         }
-    
+
+        bool isMoving = currentState == CurrentStateEnum.RunAway || currentState == CurrentStateEnum.RunTowards;
+        rival.animator.SetBool("isMoving", isMoving);    
     }
 
     private void UpdateAnimator()
     {
         signRivalToPlayer = Mathf.Sign(player.transform.position.x - rival.transform.position.x);
     
-        if (currentState.Equals(currentStateEnum.runAway))
+        if (currentState.Equals(CurrentStateEnum.RunAway))
         {
             rival.transform.localScale = new Vector3(-signRivalToPlayer * Mathf.Abs(rival.transform.localScale.x), rival.transform.localScale.y, rival.transform.localScale.z);
-        }
-        else if (currentState.Equals(currentStateEnum.runTowards))
+        } 
+        else 
         {
             rival.transform.localScale = new Vector3(signRivalToPlayer * Mathf.Abs(rival.transform.localScale.x), rival.transform.localScale.y, rival.transform.localScale.z);
         }
-        else if (currentState.Equals(currentStateEnum.stay))
-        {
-            rival.transform.localScale = new Vector3(signRivalToPlayer * Mathf.Abs(rival.transform.localScale.x), rival.transform.localScale.y, rival.transform.localScale.z);            
-        }
-        else if (currentState.Equals(currentStateEnum.attack))
-        {
-            rival.transform.localScale = new Vector3(signRivalToPlayer * Mathf.Abs(rival.transform.localScale.x), rival.transform.localScale.y, rival.transform.localScale.z);
-        }
-
     }
 
     private void UpdateRb()
     {
         signRivalToPlayer = Mathf.Sign(player.transform.position.x - rival.transform.position.x);
     
-        if (currentState.Equals(currentStateEnum.runAway))
+        if (currentState.Equals(CurrentStateEnum.RunAway))
         {
             rival.rb.velocity = new Vector2(-signRivalToPlayer * rival.speed, rival.rb.velocity.y);
         }
-        else if (currentState.Equals(currentStateEnum.runTowards))
+        else if (currentState.Equals(CurrentStateEnum.RunTowards))
         {
             rival.rb.velocity = new Vector2(signRivalToPlayer * rival.speed, rival.rb.velocity.y);
         }
@@ -173,7 +237,6 @@ public class RivalPhaseOneState : RivalBaseState
         {
             rival.rb.velocity = new Vector2(0, 0);
         }
-
     }
 
     void UpdateCooldowns()
@@ -182,10 +245,54 @@ public class RivalPhaseOneState : RivalBaseState
         rival.attack2CooldownRemaining -= Time.fixedDeltaTime;
         rival.attack3CooldownRemaining -= Time.fixedDeltaTime;
         rival.attack4CooldownRemaining -= Time.fixedDeltaTime;
+        rival.allAttacksCooldownRemaining -= Time.fixedDeltaTime;
     }
 
     void ResetCooldown(float cooldownRemaining, float cooldown)
     {
             cooldownRemaining = cooldown;
+    }
+
+    private void onHitted(int id, int damage)
+    {
+        if (id == rival.gameObjectId)
+        {
+            rival.life -= damage;
+            rival.flashEffect.Flash();
+            if (rival.life <= 0)
+            {
+                OnDeath();
+                ChangeState(CurrentStateEnum.Death);
+            }
+        }
+    }
+
+    private void OnEndAttack1()
+    {
+        rival.InstantiateSlash();
+        ChangeState(CurrentStateEnum.Stay);
+    }
+
+    private void OnEndAttack2() => ChangeState(CurrentStateEnum.RunTowards);
+    private void OnEndAttack3() => ChangeState(CurrentStateEnum.RunTowards);
+
+    private void OnEndAttack4()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            rival.InstantiateRock();
+        }
+        ChangeState(CurrentStateEnum.Stay);
+    }
+
+    private void OnFlip()
+    {
+        rival.transform.localScale = new Vector3(-rival.transform.localScale.x, rival.transform.localScale.y, rival.transform.localScale.z);
+    }
+    
+    private void OnPlayerDeath()
+    {
+        rival.playerIsDead = true;
+        ChangeState(CurrentStateEnum.Stay);
     }
 }

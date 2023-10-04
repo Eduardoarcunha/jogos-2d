@@ -69,12 +69,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (isDead && isGrounded){
+            rb.velocity = Vector3.zero;
+            
+        }
         IsGroundedCheck();
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput |= Input.GetKeyDown(KeyCode.W);
 
         UpdateAnimator();
-        // Debug.Log("isAttacking: " + isAttacking + ", isRolling: " + isRolling + ", isHitted: " + isHitted + ", isDead: " + isDead);
     }
 
     private void FixedUpdate()
@@ -167,10 +170,7 @@ public class PlayerController : MonoBehaviour
     {
         isRolling = true;
         rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * rollForce, 0);
-        // change layer to ignore collision with enemies
-        gameObject.layer = LayerMask.NameToLayer("PlayerRolling");
-        // rb.gravityScale = 0;
-        
+        gameObject.layer = LayerMask.NameToLayer("PlayerRolling");        
     }
 
     private void OnEndRoll()

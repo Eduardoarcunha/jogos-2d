@@ -98,6 +98,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void Hitted(Transform enemyPos, int damage)
     {
+        Debug.Log("Hitted");
         if (isDead) return;
         life -= damage;
         if (life <= 0) {
@@ -139,5 +140,10 @@ public class PlayerCombat : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeFromEvents();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Projectile") && !isHitted) Hitted(collision.gameObject.transform, 1);
     }
 }
