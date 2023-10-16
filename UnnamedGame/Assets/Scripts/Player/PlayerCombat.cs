@@ -8,7 +8,17 @@ public class PlayerCombat : MonoBehaviour
     public static event Action<int, int> OnHitEnemyEvent;
     public static event Action OnDeathEvent;
 
-    [SerializeField] private int life = 5;
+    public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
+    public HealthBar healthBar;
+    public HealthBar staminaBar;
+
+
+    private int maxLife;
+    private int life;
+    private float maxStamina;
+    private float stamina;
+
+
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private int damage = 2;
@@ -24,13 +34,23 @@ public class PlayerCombat : MonoBehaviour
     private bool isGrounded = false;
     private bool isHitted = false;
     private bool isDead = false;
+    private float immunityTime = 3f;
+    private float immunityTimeRemaining = 0f;
     private Animator animator;
 
     private void Start()
     {   
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        maxLife = 10;
+        life = maxLife;
+
+        maxStamina = 100;
+        stamina = maxStamina;
+
         SubscribeToEvents();
+
+        StartCoroutine(StaminaRecovery());
     }
 
     private void SubscribeToEvents()
@@ -59,7 +79,16 @@ public class PlayerCombat : MonoBehaviour
         if (CanRollOrAttack())
         {
             if (Input.GetMouseButtonDown(0)) StartLightAttack();
-            if (Input.GetKeyDown(KeyCode.Space)) Roll();
+            if (Input.GetKeyDown(KeyCode.Space) && stamina > 20) Roll();
+        }
+
+        if (immunityTimeRemaining > 0 && !isDead) 
+        {
+            if (!flashEffect.IsFlashing())  // Check if a flash is not already happening
+            {
+                flashEffect.OscillateTransparency();
+            }
+            immunityTimeRemaining -= Time.deltaTime;
         }
     }
 
@@ -82,6 +111,8 @@ public class PlayerCombat : MonoBehaviour
 
     private void Roll()
     {
+        stamina -= 20;
+        staminaBar.UpdateHealthBar(stamina, maxStamina);
         isRolling = true;
         animator.SetTrigger("Roll");
     }
@@ -98,9 +129,11 @@ public class PlayerCombat : MonoBehaviour
 
     public void Hitted(Transform enemyPos, int damage)
     {
-        Debug.Log("Hitted");
-        if (isDead) return;
+        if (isDead || immunityTimeRemaining > 0) return;
         life -= damage;
+        healthBar.UpdateHealthBar(life, maxLife);
+        immunityTimeRemaining = immunityTime;
+
         if (life <= 0) {
             OnDeathEvent?.Invoke();
             animator.SetTrigger("Death");
@@ -118,7 +151,7 @@ public class PlayerCombat : MonoBehaviour
         float knockbackDirectionSign = Mathf.Sign(transform.position.x - enemyPos.position.x);
         Vector2 knockbackDirection = new Vector2 (knockbackDirectionSign, 1);
         rb.velocity = Vector2.zero;
-        rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);              
+        rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);  
     }
 
     private void OnEndHittedCombat()
@@ -145,5 +178,20 @@ public class PlayerCombat : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Projectile") && !isHitted) Hitted(collision.gameObject.transform, 1);
+    }
+
+    private IEnumerator StaminaRecovery()
+    {
+        while (true)
+        {
+            if (stamina < maxStamina)
+            {
+                stamina += 5;
+                if (stamina > maxStamina) stamina = maxStamina;
+                // Update any UI or other components related to stamina here
+                staminaBar.UpdateHealthBar(stamina, maxStamina);
+            }
+            yield return new WaitForSeconds(1);
+        }
     }
 }

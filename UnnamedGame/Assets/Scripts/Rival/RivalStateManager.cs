@@ -7,9 +7,12 @@ public class RivalStateManager : MonoBehaviour
     public GameObject player;
     public int playerMask;
     public Transform attackPoint;
-    public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
 
-    public GameObject rockPrefab;
+    // Scripts
+    public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
+    public HealthBar healthBar;
+
+    public GameObject fireMeteorPrefab;
     public GameObject slashPrefab;
 
     [HideInInspector] public int gameObjectId;
@@ -19,7 +22,8 @@ public class RivalStateManager : MonoBehaviour
     [HideInInspector] public BoxCollider2D boxCollider { get; private set; }
     
     // Attributes
-    public float life = 1;
+    [HideInInspector] public float maxLife;
+    [HideInInspector] public float life;
     public bool isDead = false;  
     public bool canAttack = true;
     public float speed = 3f;
@@ -59,6 +63,9 @@ public class RivalStateManager : MonoBehaviour
 
     private void Start()
     {
+        maxLife = 50;
+        life = maxLife;
+
         allAttacksCooldown = 20f;
         attack1Cooldown = 70f;
         attack2Cooldown = 30f;
@@ -83,10 +90,20 @@ public class RivalStateManager : MonoBehaviour
         currentState.InitializeState(this);
     }
 
-    public void InstantiateRock()
+    public void InstantiateFireMeteor()
     {
-        Vector3 randomPosition = new Vector3(Random.Range(-10,10), 5, 0);
-        GameObject rock = Instantiate(rockPrefab, randomPosition, Quaternion.identity);
+        Vector3 randomPosition = new Vector3(Random.Range(-10, 10), 5, 0);
+        Vector2 randomSpeed = new Vector2(Random.Range(-1f,1f), -3f);
+
+
+        float angle = Mathf.Atan2(randomSpeed.y, randomSpeed.x) * Mathf.Rad2Deg;
+        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        GameObject fireMeteor = Instantiate(fireMeteorPrefab, randomPosition, rotation);
+
+        // Assuming fireMeteor has a Rigidbody2D component
+        Rigidbody2D rb = fireMeteor.GetComponent<Rigidbody2D>();
+        rb.velocity = randomSpeed;
     }
 
     public void InstantiateSlash()

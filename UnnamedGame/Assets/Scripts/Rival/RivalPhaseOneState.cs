@@ -151,7 +151,6 @@ public class RivalPhaseOneState : RivalBaseState
 
     private void OnHitAttack()
     {
-        Debug.Log("OnHitAttack");
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(rival.attackPoint.position, rival.attackHitBox, rival.playerMask);
         foreach (Collider2D obj in hitObjects)
         {
@@ -258,6 +257,7 @@ public class RivalPhaseOneState : RivalBaseState
         if (id == rival.gameObjectId)
         {
             rival.life -= damage;
+            rival.healthBar.UpdateHealthBar(rival.life, rival.maxLife);
             rival.flashEffect.Flash();
             if (rival.life <= 0)
             {
@@ -280,7 +280,7 @@ public class RivalPhaseOneState : RivalBaseState
     {
         for (int i = 0; i < 5; i++)
         {
-            rival.InstantiateRock();
+            rival.InstantiateFireMeteor();
         }
         ChangeState(CurrentStateEnum.Stay);
     }

@@ -16,6 +16,10 @@ namespace BarthaSzabolcs.Tutorial_SpriteFlash
         [Tooltip("Duration of the flash.")]
         [SerializeField] private float duration;
 
+
+        [Tooltip("Oscillation speed.")]
+        [SerializeField] private float oscillationSpeed = 5.0f;
+
         #endregion
         #region Private Fields
 
@@ -27,6 +31,8 @@ namespace BarthaSzabolcs.Tutorial_SpriteFlash
 
         // The currently running coroutine.
         private Coroutine flashRoutine;
+
+        private Coroutine oscillateRoutine;
 
         #endregion
 
@@ -62,6 +68,39 @@ namespace BarthaSzabolcs.Tutorial_SpriteFlash
 
             // Start the Coroutine, and store the reference for it.
             flashRoutine = StartCoroutine(FlashRoutine());
+        }
+
+        public void OscillateTransparency()
+        {
+            if (oscillateRoutine != null)
+            {
+                StopCoroutine(oscillateRoutine);
+            }
+
+            oscillateRoutine = StartCoroutine(OscillateTransparencyRoutine());
+        }
+
+        private IEnumerator OscillateTransparencyRoutine()
+        {
+            float startTime = Time.time;
+
+            while (Time.time - startTime < duration)
+            {
+                float alpha = Mathf.PingPong(Time.time * oscillationSpeed, 1.0f);
+                Color currentColor = spriteRenderer.color;
+                spriteRenderer.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
+                yield return null;
+            }
+
+            // Reset to original color at the end
+            Color originalColor = spriteRenderer.color;
+            spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1.0f);
+            oscillateRoutine = null;
+        }
+
+        public bool IsFlashing()
+        {
+           return flashRoutine != null;
         }
 
         private IEnumerator FlashRoutine()

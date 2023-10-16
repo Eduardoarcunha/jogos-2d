@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     private Vector2 targetVelocity;
     private Vector3 velocity = Vector3.zero;
 
-
     public static event Action<bool> OnChangeGroundedState;
 
     void Start()
