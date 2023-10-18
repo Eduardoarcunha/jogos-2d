@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     public static event Action<int, int> OnHitEnemyEvent;
+    public static event Action OnEndAttackEvent;
     public static event Action OnDeathEvent;
 
     public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
@@ -32,6 +33,7 @@ public class PlayerCombat : MonoBehaviour
     private bool isGrounded = false;
     private bool isHitted = false;
     private bool isDead = false;
+    private bool attackCombo = false;
     private float immunityTime = 2f;
     private float immunityTimeRemaining = 0f;
     private Animator animator;
@@ -54,7 +56,8 @@ public class PlayerCombat : MonoBehaviour
     private void SubscribeToEvents()
     {
         PlayerController.OnChangeGroundedState += HandleChangeGroundedState;
-        PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttackCombat;
+        PlayerAnimationEventsManager.OnEndAttack1Event += OnEndAttack1;
+        PlayerAnimationEventsManager.OnEndAttack2Event += OnEndAttack2;
         PlayerAnimationEventsManager.OnEndRollEvent += OnEndRollCombat;
         PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHittedCombat;
     }
@@ -62,7 +65,7 @@ public class PlayerCombat : MonoBehaviour
     private void UnsubscribeFromEvents()
     {
         PlayerController.OnChangeGroundedState -= HandleChangeGroundedState;
-        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttackCombat;
+        PlayerAnimationEventsManager.OnEndAttack2Event -= OnEndAttack2;
         PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRollCombat;
         PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHittedCombat;
     }
@@ -74,15 +77,22 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
+        if (isAttacking && !attackCombo) {
+            if (Input.GetMouseButtonDown(0)) {
+                attackCombo = true;
+                animator.SetTrigger("Attack2");
+            }
+        }
+
         if (CanRollOrAttack())
         {
-            if (Input.GetMouseButtonDown(0)) StartLightAttack();
+            if (Input.GetMouseButtonDown(0)) StartAttack("Attack1");
             if (Input.GetKeyDown(KeyCode.Space) && stamina > 20) Roll();
         }
 
         if (immunityTimeRemaining > 0 && !isDead) 
         {
-            if (!flashEffect.IsFlashing())  // Check if a flash is not already happening
+            if (!flashEffect.IsFlashing())
             {
                 flashEffect.OscillateTransparency();
             }
@@ -90,11 +100,11 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void StartLightAttack()
+    private void StartAttack(string attackType)
     {
         isAttacking = true;        
         AudioManager.instance.PlaySound("SwordSwing");
-        animator.SetTrigger("Attack");
+        animator.SetTrigger(attackType);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
@@ -102,10 +112,23 @@ public class PlayerCombat : MonoBehaviour
             if (enemy.CompareTag("Enemy")) OnHitEnemyEvent?.Invoke(enemy.gameObject.GetInstanceID(), damage);
         }
     }
+
+    private void OnEndAttack1()
+    {
+        if (attackCombo) {
+            animator.SetTrigger("Attack2");
+            StartAttack("Attack2");
+        } else {
+            isAttacking = false;
+            OnEndAttackEvent?.Invoke();
+        }
+    }
      
-    private void OnEndLightAttackCombat()
+    private void OnEndAttack2()
     {
         isAttacking = false;
+        attackCombo = false;
+        OnEndAttackEvent?.Invoke();
     }
 
     private void Roll()
@@ -146,7 +169,6 @@ public class PlayerCombat : MonoBehaviour
             isAttacking = false;
             isRolling = false;
         }
-
         
         float knockbackDirectionSign = Mathf.Sign(transform.position.x - enemyPos.position.x);
         Vector2 knockbackDirection = new Vector2 (knockbackDirectionSign, 1);
@@ -188,7 +210,6 @@ public class PlayerCombat : MonoBehaviour
             {
                 stamina += 5;
                 if (stamina > maxStamina) stamina = maxStamina;
-                // Update any UI or other components related to stamina here
                 staminaBar.UpdateHealthBar(stamina, maxStamina);
             }
             yield return new WaitForSeconds(1);

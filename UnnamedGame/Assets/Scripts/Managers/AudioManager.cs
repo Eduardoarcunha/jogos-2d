@@ -37,7 +37,7 @@ public class AudioManager : MonoBehaviour
 
         if (s == null)
         {
-            Debug.Log("Sound: " + name + " not found!");
+            // Debug.Log("Sound: " + name + " not found!");
             return;
         } else {
             s.source.Play();
@@ -50,7 +50,7 @@ public class AudioManager : MonoBehaviour
 
         if (s == null)
         {
-            Debug.Log("Sound: " + name + " not found!");
+            // Debug.Log("Sound: " + name + " not found!");
             return;
         } else {
             s.source.Stop();
@@ -63,7 +63,7 @@ public class AudioManager : MonoBehaviour
 
         if (s == null)
         {
-            Debug.Log("Sound: " + name + " not found!");
+            // Debug.Log("Sound: " + name + " not found!");
             return false;
         } else {
             return s.source.isPlaying;
