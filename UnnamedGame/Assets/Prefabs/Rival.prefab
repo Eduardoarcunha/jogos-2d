@@ -201,7 +201,7 @@ MonoBehaviour:
   attackPoint: {fileID: 8721298681235034057}
   flashEffect: {fileID: 3397681267204596757}
   healthBar: {fileID: 0}
-  rockPrefab: {fileID: 3233107207497019926, guid: 1ee97e3c9273602478ea5dcbc2fc9e27, type: 3}
+  fireMeteorPrefab: {fileID: 3233107207497019926, guid: 1ee97e3c9273602478ea5dcbc2fc9e27, type: 3}
   slashPrefab: {fileID: 6063829300873929948, guid: f2f08244503e61c4a8782c75d9c5fb5f, type: 3}
   gameObjectId: 0
   maxLife: 5

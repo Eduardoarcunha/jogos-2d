@@ -6,17 +6,22 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
+    // Rigidbody and Animator
     private Rigidbody2D rb;
     private Animator animator;
-    [SerializeField] private Collider2D coll;
-    
+
+    // Components and Transforms
+    // [SerializeField] private Collider2D coll;
     [SerializeField] private Transform groundCheck;
+
+    // Movement parameters
     [SerializeField] private float airPenalty = 0.9f;
     [SerializeField] private float accelerationForce = 400;
     [SerializeField] private float rollForce = 10;
-    [SerializeField] private float jumpForce = 14;
-    [SerializeField] private float gravityScale = 3.0f;
+    [SerializeField] private float jumpForce = 10;
+    [SerializeField] private float gravityScale = 2.5f;
 
+    // State Variables
     private float horizontalInput;
     private bool verticalInput;
     private bool isGrounded = false;
@@ -27,7 +32,15 @@ public class PlayerController : MonoBehaviour
     private Vector2 targetVelocity;
     private Vector3 velocity = Vector3.zero;
 
+    // Potion Variables
+    private int remainingPotions = 5;
+    private int potionHealAmount = 2;
+
     public static event Action<bool> OnChangeGroundedState;
+
+    private HealthPotions healthPotions; 
+    private PlayerCombat playerCombat;   
+
 
     void Start()
     {
@@ -35,7 +48,9 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravityScale;
 
         animator = GetComponent<Animator>();
-        coll = GetComponent<Collider2D>();
+        // coll = GetComponent<Collider2D>();
+        healthPotions = GetComponent<HealthPotions>();
+        playerCombat = GetComponent<PlayerCombat>();
         SubscribeToEvents();
     }
 
@@ -70,11 +85,18 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead && isGrounded){
             rb.velocity = Vector3.zero;
-            
         }
+
         IsGroundedCheck();
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput |= Input.GetKeyDown(KeyCode.W);
+
+        if (Input.GetKeyDown(KeyCode.H) && remainingPotions > 0)
+        {
+            remainingPotions--;
+            healthPotions.SetPotions(remainingPotions);
+            playerCombat.Heal(potionHealAmount);
+        }
 
         UpdateAnimator();
     }
@@ -84,14 +106,11 @@ public class PlayerController : MonoBehaviour
         if (CanMoveOrAct())
         {
             float moveInput = horizontalInput * accelerationForce * Time.fixedDeltaTime;
-
-            if (!isGrounded)
-            {
-                moveInput *= airPenalty;
-            }
+            moveInput = !isGrounded ? moveInput * airPenalty : moveInput;
 
             if (verticalInput && isGrounded)
             {
+                AudioManager.instance.PlaySound("Jump");
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             }
 
@@ -112,9 +131,19 @@ public class PlayerController : MonoBehaviour
             int sign = Mathf.Sign(horizontalInput) > 0 ? 1 : -1;
             transform.localScale = new Vector3(sign * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             animator.SetBool("isMoving", true);
+
+            if (isGrounded && !AudioManager.instance.IsPlaying("Footsteps"))
+            {
+                AudioManager.instance.PlaySound("Footsteps");
+            } else if (!isGrounded && AudioManager.instance.IsPlaying("Footsteps"))
+            {
+                AudioManager.instance.StopSound("Footsteps");
+            }
         }
         else
         {
+            // AudioManager.instance.FadeOutAndStop("Footsteps", 0.5f);
+            AudioManager.instance.StopSound("Footsteps");
             animator.SetBool("isMoving", false);
         }
 
@@ -122,6 +151,7 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isFalling", true);
         }
+        
     }
 
     private void IsGroundedCheck()
@@ -187,6 +217,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnEndHitted()
     {
+        isAttacking = false;
+        isRolling = false;
         isHitted = false;
     }
 

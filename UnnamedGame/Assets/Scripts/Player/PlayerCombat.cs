@@ -12,12 +12,10 @@ public class PlayerCombat : MonoBehaviour
     public HealthBar healthBar;
     public HealthBar staminaBar;
 
-
     private int maxLife;
     private int life;
     private float maxStamina;
     private float stamina;
-
 
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
@@ -34,7 +32,7 @@ public class PlayerCombat : MonoBehaviour
     private bool isGrounded = false;
     private bool isHitted = false;
     private bool isDead = false;
-    private float immunityTime = 3f;
+    private float immunityTime = 2f;
     private float immunityTimeRemaining = 0f;
     private Animator animator;
 
@@ -95,6 +93,7 @@ public class PlayerCombat : MonoBehaviour
     private void StartLightAttack()
     {
         isAttacking = true;        
+        AudioManager.instance.PlaySound("SwordSwing");
         animator.SetTrigger("Attack");
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
@@ -111,6 +110,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Roll()
     {
+        AudioManager.instance.PlaySound("Roll");
         stamina -= 20;
         staminaBar.UpdateHealthBar(stamina, maxStamina);
         isRolling = true;
@@ -193,5 +193,19 @@ public class PlayerCombat : MonoBehaviour
             }
             yield return new WaitForSeconds(1);
         }
+    }
+
+    public void Heal(int healAmount)
+    {
+        AudioManager.instance.PlaySound("Heal");
+        life += healAmount;
+        if (life >= maxLife) life = maxLife;
+        healthBar.UpdateHealthBar(life, maxLife);
+    }
+
+    public void SetCurrentLife(int life)
+    {
+        this.life = life;
+        healthBar.UpdateHealthBar(life, maxLife);
     }
 }
