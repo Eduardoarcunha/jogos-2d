@@ -1,0 +1,238 @@
+using System.Collections;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+
+    // Rigidbody and Animator
+    private Rigidbody2D rb;
+    private Animator animator;
+
+    // Components and Transforms
+    // [SerializeField] private Collider2D coll;
+    [SerializeField] private Transform groundCheck;
+
+    // Movement parameters
+    [SerializeField] private float airPenalty = 0.9f;
+    [SerializeField] private float accelerationForce = 400;
+    [SerializeField] private float rollForce = 10;
+    [SerializeField] private float jumpForce = 10;
+    [SerializeField] private float gravityScale = 2.5f;
+
+    // State Variables
+    private float horizontalInput;
+    private bool verticalInput;
+    private bool isGrounded = false;
+    private bool isAttacking = false;
+    private bool isRolling = false;
+    private bool isHitted = false;
+    private bool isDead = false;
+    private Vector2 targetVelocity;
+    private Vector3 velocity = Vector3.zero;
+
+    // Potion Variables
+    private int remainingPotions = 5;
+    private int potionHealAmount = 2;
+
+    public static event Action<bool> OnChangeGroundedState;
+
+    private HealthPotions healthPotions; 
+    private PlayerCombat playerCombat;   
+
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = gravityScale;
+
+        animator = GetComponent<Animator>();
+        // coll = GetComponent<Collider2D>();
+        healthPotions = GetComponent<HealthPotions>();
+        playerCombat = GetComponent<PlayerCombat>();
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        PlayerAnimationEventsManager.OnStartLightAttackEvent += OnStartLightAttack;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartRollEvent += OnStartRoll;
+        PlayerAnimationEventsManager.OnEndRollEvent += OnEndRoll;
+        PlayerAnimationEventsManager.OnHittedEvent += OnHitted;
+        PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHitted;
+        PlayerCombat.OnDeathEvent += OnDeath;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
+        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
+        PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
+        PlayerAnimationEventsManager.OnHittedEvent -= OnHitted;
+        PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHitted;
+        PlayerCombat.OnDeathEvent -= OnDeath;
+    }
+
+    private bool CanMoveOrAct()
+    {
+        return !isAttacking && !isRolling && !isHitted && !isDead;
+    }
+
+    private void Update()
+    {
+        if (isDead && isGrounded){
+            rb.velocity = Vector3.zero;
+        }
+
+        IsGroundedCheck();
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput |= Input.GetKeyDown(KeyCode.W);
+
+        if (Input.GetKeyDown(KeyCode.H) && remainingPotions > 0)
+        {
+            remainingPotions--;
+            healthPotions.SetPotions(remainingPotions);
+            playerCombat.Heal(potionHealAmount);
+        }
+
+        UpdateAnimator();
+    }
+
+    private void FixedUpdate()
+    {
+        if (CanMoveOrAct())
+        {
+            float moveInput = horizontalInput * accelerationForce * Time.fixedDeltaTime;
+            moveInput = !isGrounded ? moveInput * airPenalty : moveInput;
+
+            if (verticalInput && isGrounded)
+            {
+                AudioManager.instance.PlaySound("Jump");
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            }
+
+            Move(moveInput);
+        }
+    }
+
+    private void Move(float moveInput)
+    {
+        targetVelocity = new Vector2(moveInput, rb.velocity.y);
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, 0.05f);
+    }
+
+    private void UpdateAnimator()
+    {
+        if (horizontalInput != 0 && !isAttacking && !isRolling && !isHitted && !isDead)
+        {
+            int sign = Mathf.Sign(horizontalInput) > 0 ? 1 : -1;
+            transform.localScale = new Vector3(sign * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            animator.SetBool("isMoving", true);
+
+            if (isGrounded && !AudioManager.instance.IsPlaying("Footsteps"))
+            {
+                AudioManager.instance.PlaySound("Footsteps");
+            } else if (!isGrounded && AudioManager.instance.IsPlaying("Footsteps"))
+            {
+                AudioManager.instance.StopSound("Footsteps");
+            }
+        }
+        else
+        {
+            // AudioManager.instance.FadeOutAndStop("Footsteps", 0.5f);
+            AudioManager.instance.StopSound("Footsteps");
+            animator.SetBool("isMoving", false);
+        }
+
+        if (!isGrounded && rb.velocity.y < 0 && !isDead && !isHitted && !isRolling)
+        {
+            animator.SetBool("isFalling", true);
+        }
+        
+    }
+
+    private void IsGroundedCheck()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f);
+        
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject != gameObject)
+            {
+                if (!isGrounded) {
+                    verticalInput = false;
+                    isGrounded = true;
+                    OnChangeGroundedState?.Invoke(true);
+                    
+                    if (isDead) {
+                        rb.velocity = Vector3.zero;
+                    } else {
+                        animator.SetBool("isGrounded", true);
+                        animator.SetBool("isFalling", false);
+                    }
+                }
+                return;
+            }
+        }
+        if (isGrounded) {
+           animator.SetBool("isGrounded", false);
+            OnChangeGroundedState?.Invoke(false);
+            isGrounded = false;
+        }
+    }
+
+    private void OnStartLightAttack()
+    {
+        isAttacking = true;
+        rb.velocity = Vector2.zero;
+    }
+
+    private void OnEndLightAttack()
+    {
+        isAttacking = false;
+    }
+
+    private void OnStartRoll()
+    {
+        isRolling = true;
+        rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * rollForce, 0);
+        gameObject.layer = LayerMask.NameToLayer("PlayerRolling");        
+    }
+
+    private void OnEndRoll()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        isRolling = false;
+    }
+
+    private void OnHitted()
+    {
+        isAttacking = false;
+        isRolling = false;
+        isHitted = true;
+    }
+
+    private void OnEndHitted()
+    {
+        isAttacking = false;
+        isRolling = false;
+        isHitted = false;
+    }
+
+
+    private void OnDeath()
+    {
+        isDead = true;
+        isAttacking = false;
+        isRolling = false;
+        isHitted = false;
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeFromEvents();
+    }
+}

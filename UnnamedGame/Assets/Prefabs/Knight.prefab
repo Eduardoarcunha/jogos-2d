@@ -78,7 +78,9 @@ GameObject:
   - component: {fileID: 7926866983524635170}
   - component: {fileID: 277903096692288949}
   - component: {fileID: 121570741513795300}
-  m_Layer: 8
+  - component: {fileID: 1286963780124691618}
+  - component: {fileID: 7176473367121093432}
+  m_Layer: 12
   m_Name: Knight
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -263,7 +265,7 @@ MonoBehaviour:
   groundCheck: {fileID: 2437060418209647297}
   airPenalty: 0.9
   accelerationForce: 200
-  rollForce: 6
+  rollForce: 4
   jumpForce: 10
   gravityScale: 2.5
 --- !u!114 &277903096692288949
@@ -278,7 +280,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbef3a22ed4587047abd13a8a9f0654c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 5
+  flashEffect: {fileID: 1286963780124691618}
+  healthBar: {fileID: 0}
+  staminaBar: {fileID: 0}
   attackPoint: {fileID: 4575411813889867489}
   attackRange: 0.4
   damage: 2
@@ -298,3 +302,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cd52b53da52b1c40b45bd1bbf02c626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1286963780124691618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8046040543957836233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51174adaabb4eb428def3944c367fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: 07adf1bdd49bad74b89dc4da8b6699b4, type: 2}
+  duration: 1
+  oscillationSpeed: 5
+--- !u!114 &7176473367121093432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8046040543957836233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96321019c295ffb479c6cd86caaf1b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthPotions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  emptyFlaskSprite: {fileID: 21300000, guid: 9428746f09f5e9242884722ff8775f75, type: 3}
