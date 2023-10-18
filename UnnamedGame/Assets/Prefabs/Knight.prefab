@@ -261,13 +261,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9016fa8190f994682e4f5575697ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coll: {fileID: 0}
   groundCheck: {fileID: 2437060418209647297}
   airPenalty: 0.9
   accelerationForce: 200
   rollForce: 4
-  jumpForce: 10
-  gravityScale: 2.5
+  jumpForce: 9
+  gravityScale: 2
 --- !u!114 &277903096692288949
 MonoBehaviour:
   m_ObjectHideFlags: 0

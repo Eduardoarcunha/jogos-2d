@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     // Components and Transforms
-    // [SerializeField] private Collider2D coll;
     [SerializeField] private Transform groundCheck;
 
     // Movement parameters
@@ -48,7 +47,6 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravityScale;
 
         animator = GetComponent<Animator>();
-        // coll = GetComponent<Collider2D>();
         healthPotions = GetComponent<HealthPotions>();
         playerCombat = GetComponent<PlayerCombat>();
         SubscribeToEvents();
@@ -56,24 +54,31 @@ public class PlayerController : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        PlayerAnimationEventsManager.OnStartLightAttackEvent += OnStartLightAttack;
-        PlayerAnimationEventsManager.OnEndLightAttackEvent += OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartAttack1Event += OnStartAttack;
+        PlayerAnimationEventsManager.OnStartAttack2Event += OnStartAttack;
+
         PlayerAnimationEventsManager.OnStartRollEvent += OnStartRoll;
         PlayerAnimationEventsManager.OnEndRollEvent += OnEndRoll;
         PlayerAnimationEventsManager.OnHittedEvent += OnHitted;
         PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHitted;
         PlayerCombat.OnDeathEvent += OnDeath;
+        PlayerCombat.OnEndAttackEvent += OnEndAttack;
     }
 
     private void UnsubscribeFromEvents()
     {
-        PlayerAnimationEventsManager.OnStartLightAttackEvent -= OnStartLightAttack;
-        PlayerAnimationEventsManager.OnEndLightAttackEvent -= OnEndLightAttack;
+        PlayerAnimationEventsManager.OnStartAttack1Event -= OnStartAttack;
+        PlayerAnimationEventsManager.OnEndAttack1Event -= OnEndAttack;
+
+        PlayerAnimationEventsManager.OnStartAttack2Event -= OnStartAttack;
+        PlayerAnimationEventsManager.OnEndAttack2Event -= OnEndAttack;
+
         PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
         PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
         PlayerAnimationEventsManager.OnHittedEvent -= OnHitted;
         PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHitted;
         PlayerCombat.OnDeathEvent -= OnDeath;
+        PlayerCombat.OnEndAttackEvent -= OnEndAttack;
     }
 
     private bool CanMoveOrAct()
@@ -184,13 +189,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnStartLightAttack()
+    private void OnStartAttack()
     {
         isAttacking = true;
         rb.velocity = Vector2.zero;
     }
 
-    private void OnEndLightAttack()
+    private void OnEndAttack()
     {
         isAttacking = false;
     }
