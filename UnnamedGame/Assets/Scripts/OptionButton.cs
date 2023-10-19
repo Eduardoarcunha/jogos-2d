@@ -39,6 +39,9 @@ public class OptionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     private void Update()
     {
+        Debug.Log(buttonText);
+        Debug.Log(buttonImage);
+        Debug.Log(isHovering);
         // Smoothly adjust the scale
         if (isHovering)
         {
