@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
 
     private void IsGroundedCheck()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f, LayerMask.GetMask("Ground"));
         
         foreach (Collider2D collider in colliders)
         {

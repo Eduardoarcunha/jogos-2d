@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SkeletonStateManager : MonoBehaviour
 {
+    [Header("References")]
     public GameObject player;
     public Transform attackPoint;
     public Transform raycastPoint;
@@ -13,19 +14,25 @@ public class SkeletonStateManager : MonoBehaviour
     [HideInInspector] public Animator animator { get; private set; }
     [HideInInspector] public SpriteRenderer spriteRenderer { get; private set; }
     [HideInInspector] public BoxCollider2D boxCollider { get; private set; }
+    [HideInInspector] public int gameObjectId;  
+    [HideInInspector] public bool isDead = false;
     
-    public int gameObjectId;  
+    [Header("Properties")]
     public float[] roamingPositions;
     public float speed = 2f;
+    public float life = 8;
 
+    [Header("Attack Settings")]
+    public float damage = 2f;
     public float attackRange = 0.5f;
-    public float life = 10;
-    public bool isDead = false;
-      
-
+    public float attackCooldown = 2f;
+    public float attackCooldownRemaining = 0f;
+    
+    #region StateMachine
     private SkeletonBaseState currentState;
-    public SkeletonUnawareState unawareState = new SkeletonUnawareState();
-    public SkeletonAwareState awareState = new SkeletonAwareState();
+    [HideInInspector] public SkeletonUnawareState unawareState = new SkeletonUnawareState();
+    [HideInInspector] public SkeletonAwareState awareState = new SkeletonAwareState();
+    #endregion
 
     private void Awake()
     {

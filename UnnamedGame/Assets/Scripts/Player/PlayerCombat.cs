@@ -9,25 +9,28 @@ public class PlayerCombat : MonoBehaviour
     public static event Action OnEndAttackEvent;
     public static event Action OnDeathEvent;
 
+    [Header("References")]
     public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
     public HealthBar healthBar;
     public HealthBar staminaBar;
 
-    private int maxLife;
+    [Header("Properties")]
+    [SerializeField] private int maxLife;
+    [SerializeField] private float maxStamina;
     private int life;
-    private float maxStamina;
     private float stamina;
 
+    [Header("Attack Settings")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
-    [SerializeField] private int damage = 2;
+    [SerializeField] private int damage = 1;
+
+    [Header("Others Settings")]
     [SerializeField] private Vector2 knockbackForce;
-
-
     [SerializeField] private LayerMask enemyLayers;
 
-    private Rigidbody2D rb;
 
+    private Rigidbody2D rb;
     private bool isAttacking = false;
     private bool isRolling = false;
     private bool isGrounded = false;
@@ -42,10 +45,7 @@ public class PlayerCombat : MonoBehaviour
     {   
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        maxLife = 10;
         life = maxLife;
-
-        maxStamina = 100;
         stamina = maxStamina;
 
         SubscribeToEvents();
@@ -88,15 +88,6 @@ public class PlayerCombat : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0)) StartAttack("Attack1");
             if (Input.GetKeyDown(KeyCode.Space) && stamina > 20) Roll();
-        }
-
-        if (immunityTimeRemaining > 0 && !isDead) 
-        {
-            if (!flashEffect.IsFlashing())
-            {
-                flashEffect.OscillateTransparency();
-            }
-            immunityTimeRemaining -= Time.deltaTime;
         }
     }
 
@@ -155,7 +146,8 @@ public class PlayerCombat : MonoBehaviour
         if (isDead || immunityTimeRemaining > 0) return;
         life -= damage;
         healthBar.UpdateHealthBar(life, maxLife);
-        immunityTimeRemaining = immunityTime;
+
+        StartCoroutine(StartImmunity());
 
         if (life <= 0) {
             OnDeathEvent?.Invoke();
@@ -174,6 +166,26 @@ public class PlayerCombat : MonoBehaviour
         Vector2 knockbackDirection = new Vector2 (knockbackDirectionSign, 1);
         rb.velocity = Vector2.zero;
         rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);  
+    }
+
+    private IEnumerator StartImmunity()
+    {
+        float tolerance = .8f;
+        immunityTimeRemaining = immunityTime;
+        gameObject.layer = LayerMask.NameToLayer("PlayerRolling");   
+
+        while (immunityTimeRemaining > 0)
+        {
+            if (!flashEffect.IsFlashing())
+            {
+                flashEffect.OscillateTransparency();
+            }
+
+            immunityTimeRemaining -= Time.deltaTime;
+            yield return null; 
+        }
+        yield return new WaitForSeconds(tolerance);
+        gameObject.layer = LayerMask.NameToLayer("Player");   
     }
 
     private void OnEndHittedCombat()

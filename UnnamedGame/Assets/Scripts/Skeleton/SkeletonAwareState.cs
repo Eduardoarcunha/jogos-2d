@@ -11,8 +11,8 @@ public class SkeletonAwareState : SkeletonBaseState
     private int playerMask;
 
     private float signPlayerToSkeleton;
-    private float attackCooldown = 2f;
-    private float attackCooldownRemaining = 0f;
+    private float attackCooldown;
+    private float attackCooldownRemaining;
 
     private bool playerInAttackRange;
     private bool isAttacking;
@@ -23,6 +23,9 @@ public class SkeletonAwareState : SkeletonBaseState
 
         raycastPoint = skeleton.raycastPoint;
         attackPoint = skeleton.attackPoint;
+
+        attackCooldown = skeleton.attackCooldown;
+        attackCooldownRemaining = skeleton.attackCooldownRemaining;
         
         player = skeleton.player;
         playerMask = LayerMask.GetMask("Player");

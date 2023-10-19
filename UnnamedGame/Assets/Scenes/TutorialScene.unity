@@ -1345,7 +1345,7 @@ GameObject:
   - component: {fileID: 926019556}
   - component: {fileID: 926019557}
   - component: {fileID: 926019558}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1473,20 +1473,36 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 277903096692288949, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
+      propertyPath: damage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 277903096692288949, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
+      propertyPath: maxLife
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 277903096692288949, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1103367035}
     - target: {fileID: 277903096692288949, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
+      propertyPath: maxStamina
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 277903096692288949, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 913181084}
+    - target: {fileID: 1286963780124691618, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
+      propertyPath: duration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2117739326903225720, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.16
       objectReference: {fileID: 0}
     - target: {fileID: 2117739326903225720, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.05
+      value: -2.12
       objectReference: {fileID: 0}
     - target: {fileID: 2117739326903225720, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
       propertyPath: m_LocalPosition.z
