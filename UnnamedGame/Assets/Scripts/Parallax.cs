@@ -7,6 +7,7 @@ public class Parallax : MonoBehaviour
     private float length, startpos;
     private Transform cam;
     public float ParallaxEffect;
+    private float lockedY;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +15,7 @@ public class Parallax : MonoBehaviour
         startpos = transform.position.x;
         length = GetComponent<SpriteRenderer>().bounds.size.x;
         cam = Camera.main.transform;
+        lockedY = transform.position.y;
         
         
     }
@@ -23,7 +25,7 @@ public class Parallax : MonoBehaviour
     {
         float repos = cam.transform.position.x * (1 - ParallaxEffect);
         float distance = cam.transform.position.x * ParallaxEffect;
-        transform.position = new Vector3(startpos + distance, transform.position.y, transform.position.z);
+        transform.position = new Vector3(startpos + distance, lockedY, transform.position.z);
 
         // Debug.Log("Repos: " + repos + ", Distance: " + distance);
 
