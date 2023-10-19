@@ -5,20 +5,22 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-    // Rigidbody and Animator
     private Rigidbody2D rb;
     private Animator animator;
 
-    // Components and Transforms
-    [SerializeField] private Transform groundCheck;
+    [Header("References")]
+    private HealthPotions healthPotions; 
+    private PlayerCombat playerCombat;   
+    [SerializeField] private Transform groundCheck;    
 
-    // Movement parameters
+    [Header("Properties")]
     [SerializeField] private float airPenalty = 0.9f;
     [SerializeField] private float accelerationForce = 400;
     [SerializeField] private float rollForce = 10;
     [SerializeField] private float jumpForce = 10;
     [SerializeField] private float gravityScale = 2.5f;
+    private int remainingPotions = 5;
+    private int potionHealAmount = 1;
 
     // State Variables
     private float horizontalInput;
@@ -28,18 +30,11 @@ public class PlayerController : MonoBehaviour
     private bool isRolling = false;
     private bool isHitted = false;
     private bool isDead = false;
+    private bool paused = false;
     private Vector2 targetVelocity;
     private Vector3 velocity = Vector3.zero;
 
-    // Potion Variables
-    private int remainingPotions = 5;
-    private int potionHealAmount = 1;
-
     public static event Action<bool> OnChangeGroundedState;
-
-    private HealthPotions healthPotions; 
-    private PlayerCombat playerCombat;   
-
 
     void Start()
     {
@@ -56,29 +51,26 @@ public class PlayerController : MonoBehaviour
     {
         PlayerAnimationEventsManager.OnStartAttack1Event += OnStartAttack;
         PlayerAnimationEventsManager.OnStartAttack2Event += OnStartAttack;
-
         PlayerAnimationEventsManager.OnStartRollEvent += OnStartRoll;
         PlayerAnimationEventsManager.OnEndRollEvent += OnEndRoll;
         PlayerAnimationEventsManager.OnHittedEvent += OnHitted;
         PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHitted;
         PlayerCombat.OnDeathEvent += OnDeath;
         PlayerCombat.OnEndAttackEvent += OnEndAttack;
+        GameManager.OnPauseOrResumeGame += OnPauseOrResumeGame;
     }
 
     private void UnsubscribeFromEvents()
     {
         PlayerAnimationEventsManager.OnStartAttack1Event -= OnStartAttack;
-        PlayerAnimationEventsManager.OnEndAttack1Event -= OnEndAttack;
-
         PlayerAnimationEventsManager.OnStartAttack2Event -= OnStartAttack;
-        PlayerAnimationEventsManager.OnEndAttack2Event -= OnEndAttack;
-
         PlayerAnimationEventsManager.OnStartRollEvent -= OnStartRoll;
         PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRoll;
         PlayerAnimationEventsManager.OnHittedEvent -= OnHitted;
         PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHitted;
         PlayerCombat.OnDeathEvent -= OnDeath;
         PlayerCombat.OnEndAttackEvent -= OnEndAttack;
+        GameManager.OnPauseOrResumeGame -= OnPauseOrResumeGame;
     }
 
     private bool CanMoveOrAct()
@@ -93,16 +85,18 @@ public class PlayerController : MonoBehaviour
         }
 
         IsGroundedCheck();
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput |= Input.GetKeyDown(KeyCode.W);
 
-        if (Input.GetKeyDown(KeyCode.H) && remainingPotions > 0)
-        {
-            remainingPotions--;
-            healthPotions.SetPotions(remainingPotions);
-            playerCombat.Heal(potionHealAmount);
+        if (!paused){
+            horizontalInput = Input.GetAxis("Horizontal");
+            verticalInput |= Input.GetKeyDown(KeyCode.W);
+
+            if (Input.GetKeyDown(KeyCode.H) && remainingPotions > 0)
+            {
+                remainingPotions--;
+                healthPotions.SetPotions(remainingPotions);
+                playerCombat.Heal(potionHealAmount);
+            }
         }
-
         UpdateAnimator();
     }
 
@@ -244,5 +238,10 @@ public class PlayerController : MonoBehaviour
     public void IncreaseSpeed()
     {
         accelerationForce += 50;
+    }
+
+    private void OnPauseOrResumeGame(bool isPaused)
+    {
+        paused = isPaused;
     }
 }

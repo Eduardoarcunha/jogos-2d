@@ -36,6 +36,7 @@ public class PlayerCombat : MonoBehaviour
     private bool isGrounded = false;
     private bool isHitted = false;
     private bool isDead = false;
+    private bool paused = false;
     private bool attackCombo = false;
     private float immunityTime = 2f;
     private float immunityTimeRemaining = 0f;
@@ -60,6 +61,7 @@ public class PlayerCombat : MonoBehaviour
         PlayerAnimationEventsManager.OnEndAttack2Event += OnEndAttack2;
         PlayerAnimationEventsManager.OnEndRollEvent += OnEndRollCombat;
         PlayerAnimationEventsManager.OnEndHittedEvent += OnEndHittedCombat;
+        GameManager.OnPauseOrResumeGame += OnPauseOrResumeGame;
     }
 
     private void UnsubscribeFromEvents()
@@ -68,6 +70,7 @@ public class PlayerCombat : MonoBehaviour
         PlayerAnimationEventsManager.OnEndAttack2Event -= OnEndAttack2;
         PlayerAnimationEventsManager.OnEndRollEvent -= OnEndRollCombat;
         PlayerAnimationEventsManager.OnEndHittedEvent -= OnEndHittedCombat;
+        GameManager.OnPauseOrResumeGame -= OnPauseOrResumeGame;
     }
 
     private bool CanRollOrAttack()
@@ -77,6 +80,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
+        if (paused) return;
         if (isAttacking && !attackCombo) {
             if (Input.GetMouseButtonDown(0)) {
                 attackCombo = true;
@@ -245,5 +249,9 @@ public class PlayerCombat : MonoBehaviour
     public void IncreaseDamage()
     {
         damage++;
+    }
+
+    private void OnPauseOrResumeGame(bool value){
+        paused = value;
     }
 }

@@ -10,8 +10,12 @@ public class GameManager : MonoBehaviour
 
     public static event Action<GameState> OnBeforeGameStateChange;
     public static event Action<GameState> OnAfterGameStateChange;
+
+    public static event Action<bool> OnPauseOrResumeGame;
     
     public GameState gameState { get; private set;}
+
+    private bool paused = false;
 
     void Awake()
     {
@@ -28,6 +32,11 @@ public class GameManager : MonoBehaviour
     {
         ChangeState(GameState.Menu);
     }
+
+    void Update(){
+        if (Input.GetKeyDown(KeyCode.Escape) && gameState != GameState.Menu && gameState != GameState.GameOver) PauseOrResume();
+    }
+
 
 
     public void ChangeState(GameState newGameState)
@@ -51,7 +60,7 @@ public class GameManager : MonoBehaviour
             case GameState.Play:
                 if (oldGameState != GameState.LevelUp)
                 {
-                    SceneManager.LoadScene("DarkFireCastle");
+                    SceneManager.LoadScene("DarkFireCastleMecanicas");
                 }
                 break;
             case GameState.GameOver:
@@ -61,6 +70,11 @@ public class GameManager : MonoBehaviour
         }
         
         OnAfterGameStateChange?.Invoke(gameState);
+    }
+
+    public void PauseOrResume(){
+        paused = !paused;
+        OnPauseOrResumeGame?.Invoke(paused);
     }
 
     public enum GameState

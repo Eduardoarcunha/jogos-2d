@@ -11,10 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MenuScene.unity
     guid: de9a3715310098c45903f316a6efb19b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/antiga.unity
     guid: 2e166d35ea506ec4d977ca63cb4001c0
   - enabled: 1
     path: Assets/Scenes/TutorialScene.unity
     guid: f3e2a5d0b7a38424c845fb8d441305ab
+  - enabled: 1
+    path: Assets/Scenes/DarkFireCastleMecanicas.unity
+    guid: 657ead7c1b92bbc49908644d2a940fcc
   m_configObjects: {}
