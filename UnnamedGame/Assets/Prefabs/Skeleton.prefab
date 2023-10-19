@@ -202,13 +202,16 @@ MonoBehaviour:
   raycastPoint: {fileID: 7927752499558727799}
   flashEffect: {fileID: 5306183629887688818}
   gameObjectId: 0
+  isDead: 0
   roamingPositions:
   - -3
   - 3
   speed: 2
+  life: 6
+  damage: 2
   attackRange: 0.5
-  life: 10
-  isDead: 0
+  attackCooldown: 2
+  attackCooldownRemaining: 0
 --- !u!114 &1806283481263096085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: 07adf1bdd49bad74b89dc4da8b6699b4, type: 2}
   duration: 0.3
+  oscillationSpeed: 5
 --- !u!1 &5019011157735105927
 GameObject:
   m_ObjectHideFlags: 0
