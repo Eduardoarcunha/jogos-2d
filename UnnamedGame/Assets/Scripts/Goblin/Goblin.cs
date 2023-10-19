@@ -19,6 +19,7 @@ public class Goblin : MonoBehaviour
     private float attackPoint2Range = 0.5f;
     private float life = 4;
     private int attack1Damage = 2;
+    private int expPoints = 9;
 
     [Header("Attack Settings")]
     private int nextAttack = 1;
@@ -183,6 +184,7 @@ public class Goblin : MonoBehaviour
         boxCollider.enabled = false;
         isDead = true;
         animator.SetTrigger("DeathTrigger");
+        ProgressionManager.instance.AddExp(expPoints);
     }
 
     private void DestroyGoblin()

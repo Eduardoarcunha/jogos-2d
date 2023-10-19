@@ -6,6 +6,7 @@ public class TutorialManager : MonoBehaviour
     public string[] popUpsText;
     public PopUpWindow popUpWindowScript;
     [SerializeField] private GameObject player;
+    [SerializeField] private Bar healthBar;
 
     private int popUpIndex;
 
@@ -19,7 +20,6 @@ public class TutorialManager : MonoBehaviour
     {
         popUpIndex = 0;
         popUpWindowScript.ShowPopUp(popUpsText[popUpIndex]);
-        player.GetComponent<PlayerCombat>().SetCurrentLife(2);
     }
 
     void Update()
@@ -50,6 +50,7 @@ public class TutorialManager : MonoBehaviour
             popUpIndex++;
             popUpWindowScript.ExitPopUp();
             showPopUpAfterDelayCoroutine = StartCoroutine(ShowPopUpAfterDelay());
+            healthBar.SetBar(4,5);
         }
 
         if (popUpIndex == 4 && Input.GetKeyDown(KeyCode.H) && showPopUpAfterDelayCoroutine == null)

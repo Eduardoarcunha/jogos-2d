@@ -282,9 +282,13 @@ MonoBehaviour:
   flashEffect: {fileID: 1286963780124691618}
   healthBar: {fileID: 0}
   staminaBar: {fileID: 0}
+  maxLife: 5
+  maxStamina: 100
+  life: 0
+  stamina: 0
   attackPoint: {fileID: 4575411813889867489}
   attackRange: 0.4
-  damage: 2
+  damage: 1
   knockbackForce: {x: 3, y: 2}
   enemyLayers:
     serializedVersion: 2
@@ -314,7 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: 07adf1bdd49bad74b89dc4da8b6699b4, type: 2}
-  duration: 1
+  duration: 0.5
   oscillationSpeed: 5
 --- !u!114 &7176473367121093432
 MonoBehaviour:

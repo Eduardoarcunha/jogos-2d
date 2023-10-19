@@ -10,7 +10,7 @@ public class RivalStateManager : MonoBehaviour
 
     // Scripts
     public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
-    public HealthBar healthBar;
+    public Bar healthBar;
 
     public GameObject fireMeteorPrefab;
     public GameObject slashPrefab;

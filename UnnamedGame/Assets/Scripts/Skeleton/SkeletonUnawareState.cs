@@ -13,7 +13,6 @@ public class SkeletonUnawareState : SkeletonBaseState
 
     public override void EnterState()
     {
-        Debug.Log("Skeleton is unaware of player");
         raycastPoint = skeleton.raycastPoint;
 
         playerMask = LayerMask.GetMask("Player");

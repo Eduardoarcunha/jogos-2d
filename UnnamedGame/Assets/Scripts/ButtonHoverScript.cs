@@ -6,13 +6,13 @@ public class ButtonHoverScript : MonoBehaviour, IPointerEnterHandler, IPointerEx
 {
     public Vector3 hoverScale = new Vector3(1.1f, 1.1f, 1.1f);
     private Vector3 originalScale;
-    public Color hoverColor = new Color32(220, 161, 29, 255); // Color DCA11D
+    public Color hoverColor = new Color32(220, 161, 29, 255);
     private Color originalColor;
-    private TMP_Text buttonText; // TextMeshProUGUI
+    private TMP_Text buttonText;
 
     // Variables for smooth scaling and color change
-    private float scaleSpeed = 2f; // Adjust this value to change the speed of the scaling
-    private float colorChangeSpeed = 4f; // Adjust this value to change the speed of the color change
+    private float scaleSpeed = 2f;
+    private float colorChangeSpeed = 4f;
     private bool isHovering = false;
 
     private void Start()

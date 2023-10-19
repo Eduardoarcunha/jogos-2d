@@ -13,19 +13,22 @@ public class SkeletonAwareState : SkeletonBaseState
     private float signPlayerToSkeleton;
     private float attackCooldown;
     private float attackCooldownRemaining;
+    private int attack1Damage;
+    private int expPoints;
 
     private bool playerInAttackRange;
     private bool isAttacking;
     
     public override void EnterState()
     {
-        Debug.Log("Skeleton is aware of player");
-
         raycastPoint = skeleton.raycastPoint;
         attackPoint = skeleton.attackPoint;
 
         attackCooldown = skeleton.attackCooldown;
         attackCooldownRemaining = skeleton.attackCooldownRemaining;
+        attack1Damage = skeleton.attack1Damage;
+
+        expPoints = skeleton.expPoints;
         
         player = skeleton.player;
         playerMask = LayerMask.GetMask("Player");
@@ -73,6 +76,7 @@ public class SkeletonAwareState : SkeletonBaseState
         skeleton.boxCollider.enabled = false;
         skeleton.isDead = true;
         skeleton.animator.SetTrigger("deathTrigger");
+        ProgressionManager.instance.AddExp(expPoints);
     }
 
     
@@ -108,7 +112,7 @@ public class SkeletonAwareState : SkeletonBaseState
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, 0.5f, playerMask);
         foreach (Collider2D obj in hitObjects)
         {
-            obj.GetComponent<PlayerCombat>().Hitted(skeleton.transform, 1);
+            obj.GetComponent<PlayerCombat>().Hitted(skeleton.transform, attack1Damage);
         }
     }
 

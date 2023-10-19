@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     // Potion Variables
     private int remainingPotions = 5;
-    private int potionHealAmount = 2;
+    private int potionHealAmount = 1;
 
     public static event Action<bool> OnChangeGroundedState;
 
@@ -239,5 +239,10 @@ public class PlayerController : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeFromEvents();
+    }
+
+    public void IncreaseSpeed()
+    {
+        accelerationForce += 50;
     }
 }

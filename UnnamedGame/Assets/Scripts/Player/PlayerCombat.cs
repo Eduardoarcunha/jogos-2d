@@ -11,14 +11,14 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("References")]
     public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
-    public HealthBar healthBar;
-    public HealthBar staminaBar;
+    public Bar healthBar;
+    public Bar staminaBar;
 
     [Header("Properties")]
     [SerializeField] private int maxLife;
     [SerializeField] private float maxStamina;
-    private int life;
-    private float stamina;
+    [SerializeField] private int life;
+    [SerializeField] private float stamina;
 
     [Header("Attack Settings")]
     [SerializeField] private Transform attackPoint;
@@ -126,7 +126,7 @@ public class PlayerCombat : MonoBehaviour
     {
         AudioManager.instance.PlaySound("Roll");
         stamina -= 20;
-        staminaBar.UpdateHealthBar(stamina, maxStamina);
+        staminaBar.UpdateBar(stamina, maxStamina);
         isRolling = true;
         animator.SetTrigger("Roll");
     }
@@ -145,7 +145,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (isDead || immunityTimeRemaining > 0) return;
         life -= damage;
-        healthBar.UpdateHealthBar(life, maxLife);
+        healthBar.UpdateBar(life, maxLife);
 
         StartCoroutine(StartImmunity());
 
@@ -222,7 +222,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 stamina += 5;
                 if (stamina > maxStamina) stamina = maxStamina;
-                staminaBar.UpdateHealthBar(stamina, maxStamina);
+                staminaBar.UpdateBar(stamina, maxStamina);
             }
             yield return new WaitForSeconds(1);
         }
@@ -233,12 +233,17 @@ public class PlayerCombat : MonoBehaviour
         AudioManager.instance.PlaySound("Heal");
         life += healAmount;
         if (life >= maxLife) life = maxLife;
-        healthBar.UpdateHealthBar(life, maxLife);
+        healthBar.UpdateBar(life, maxLife);
     }
 
     public void SetCurrentLife(int life)
     {
         this.life = life;
-        healthBar.UpdateHealthBar(life, maxLife);
+        healthBar.UpdateBar(life, maxLife);
+    }
+
+    public void IncreaseDamage()
+    {
+        damage++;
     }
 }

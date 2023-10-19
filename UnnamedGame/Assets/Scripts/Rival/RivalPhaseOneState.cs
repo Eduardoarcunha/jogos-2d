@@ -257,7 +257,7 @@ public class RivalPhaseOneState : RivalBaseState
         if (id == rival.gameObjectId)
         {
             rival.life -= damage;
-            rival.healthBar.UpdateHealthBar(rival.life, rival.maxLife);
+            rival.healthBar.UpdateBar(rival.life, rival.maxLife);
             rival.flashEffect.Flash();
             if (rival.life <= 0)
             {

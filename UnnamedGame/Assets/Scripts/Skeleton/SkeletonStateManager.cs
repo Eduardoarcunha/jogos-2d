@@ -21,13 +21,14 @@ public class SkeletonStateManager : MonoBehaviour
     public float[] roamingPositions;
     public float speed = 2f;
     public float life = 8;
+    public int expPoints = 1;
 
     [Header("Attack Settings")]
-    public float damage = 2f;
     public float attackRange = 0.5f;
     public float attackCooldown = 2f;
     public float attackCooldownRemaining = 0f;
-    
+    public int attack1Damage = 2;
+
     #region StateMachine
     private SkeletonBaseState currentState;
     [HideInInspector] public SkeletonUnawareState unawareState = new SkeletonUnawareState();

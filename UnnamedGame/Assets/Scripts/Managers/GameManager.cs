@@ -29,11 +29,13 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.Menu);
     }
 
+
     public void ChangeState(GameState newGameState)
     {
         if (gameState == newGameState) return;
 
         OnBeforeGameStateChange?.Invoke(newGameState);
+        GameState oldGameState = gameState;
 
         gameState = newGameState;
         switch (gameState)
@@ -44,8 +46,13 @@ public class GameManager : MonoBehaviour
             case GameState.Tutorial:
                 SceneManager.LoadScene("TutorialScene");
                 break;
+            case GameState.LevelUp:
+                break;
             case GameState.Play:
-                SceneManager.LoadScene("DarkFireCastle");
+                if (oldGameState != GameState.LevelUp)
+                {
+                    SceneManager.LoadScene("DarkFireCastle");
+                }
                 break;
             case GameState.GameOver:
                 break;
@@ -61,7 +68,8 @@ public class GameManager : MonoBehaviour
         Menu = 0,
         Tutorial = 1,
         Play = 2,
-        GameOver = 3
+        LevelUp = 3,
+        GameOver = 4
     }
 
 }
