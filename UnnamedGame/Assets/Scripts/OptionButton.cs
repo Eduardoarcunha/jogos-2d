@@ -81,4 +81,14 @@ public class OptionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         isHovering = false;
     }
+
+    public void IncreaseDamage()
+    {
+        ProgressionManager.instance.IncreaseDamage();
+    }
+
+    public void IncreaseSpeed()
+    {
+        ProgressionManager.instance.IncreaseSpeed();
+    }
 }

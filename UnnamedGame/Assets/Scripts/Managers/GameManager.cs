@@ -23,14 +23,15 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            ChangeState(GameState.Menu);
         } else {
             Destroy(gameObject);
         }
     }
 
     void Start()
-    {
-        ChangeState(GameState.Menu);
+    {   
+        PlayerCombat.OnDeathEvent += PlayerDeath;
     }
 
     void Update(){
@@ -51,19 +52,16 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Menu:
                 SceneLoaderManager.instance.LoadScene("MenuScene");
-                // SceneManager.LoadScene("MenuScene");
                 break;
             case GameState.Tutorial:
                 SceneLoaderManager.instance.LoadScene("TutorialScene");
-                // SceneManager.LoadScene("TutorialScene");
                 break;
             case GameState.LevelUp:
                 break;
             case GameState.Play:
                 if (oldGameState != GameState.LevelUp)
                 {
-                    SceneLoaderManager.instance.LoadScene("DarkFireCastleMecanicas");
-                    // SceneManager.LoadScene("DarkFireCastleMecanicas");
+                    SceneLoaderManager.instance.LoadScene("DarkFireCastle");
                 }
                 break;
             case GameState.GameOver:
@@ -73,6 +71,10 @@ public class GameManager : MonoBehaviour
         }
         
         OnAfterGameStateChange?.Invoke(gameState);
+    }
+
+    public void PlayerDeath(){
+        ChangeState(GameState.GameOver);
     }
 
     public void PauseOrResume(){
@@ -89,4 +91,8 @@ public class GameManager : MonoBehaviour
         GameOver = 4
     }
 
+    void OnDestroy()
+    {
+        PlayerCombat.OnDeathEvent -= PlayerDeath;
+    }
 }
