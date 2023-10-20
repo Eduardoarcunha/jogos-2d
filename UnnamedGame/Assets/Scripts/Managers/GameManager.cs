@@ -51,19 +51,16 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Menu:
                 SceneLoaderManager.instance.LoadScene("MenuScene");
-                // SceneManager.LoadScene("MenuScene");
                 break;
             case GameState.Tutorial:
                 SceneLoaderManager.instance.LoadScene("TutorialScene");
-                // SceneManager.LoadScene("TutorialScene");
                 break;
             case GameState.LevelUp:
                 break;
             case GameState.Play:
                 if (oldGameState != GameState.LevelUp)
                 {
-                    SceneLoaderManager.instance.LoadScene("DarkFireCastleMecanicas");
-                    // SceneManager.LoadScene("DarkFireCastleMecanicas");
+                    SceneLoaderManager.instance.LoadScene("DarkFireCastle");
                 }
                 break;
             case GameState.GameOver:
