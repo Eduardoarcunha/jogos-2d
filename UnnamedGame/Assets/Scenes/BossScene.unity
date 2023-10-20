@@ -11083,6 +11083,12 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: BossMusic
+    clip: {fileID: 8300000, guid: 75a49833651ab2e4180c42f5046bcd33, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!4 &989375453
 Transform:
   m_ObjectHideFlags: 0
@@ -36503,6 +36509,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 277903096692288949, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
+      propertyPath: cameraBh
+      value: 
+      objectReference: {fileID: 301735283}
     - target: {fileID: 277903096692288949, guid: 6307511bd3971fd438a51c8d6e0364d4, type: 3}
       propertyPath: healthBar
       value: 

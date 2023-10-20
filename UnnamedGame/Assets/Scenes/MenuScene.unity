@@ -1045,7 +1045,7 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   - name: SkeletonHit
-    clip: {fileID: 8300000, guid: 0fe73ca0a2eed034ca7d118f6e6fe7ca, type: 3}
+    clip: {fileID: 8300000, guid: 2fe1f302b477b9443a747e1c18e4710e, type: 3}
     volume: 0.8
     pitch: 1
     loop: 0
@@ -1058,6 +1058,12 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: GoblinHit
     clip: {fileID: 8300000, guid: 7745f21f65303e04daffc5ea28345db7, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossMusic
+    clip: {fileID: 8300000, guid: 75a49833651ab2e4180c42f5046bcd33, type: 3}
     volume: 0.8
     pitch: 1
     loop: 0
