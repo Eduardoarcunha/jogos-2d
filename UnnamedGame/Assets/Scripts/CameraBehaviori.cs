@@ -36,35 +36,31 @@ public class CameraBehavior : MonoBehaviour
         isGrounded = isGroundedState;
     }
 
+    public IEnumerator Shake(float duration, float magnitude)
+    {
+        Debug.Log("Shake");
+        Vector3 originalPos = transform.localPosition;
+        float elapsed = 0.0f;
+        while (elapsed < duration)
+        {
+            float x = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+            float y = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+            transform.localPosition = new Vector3(x, y, originalPos.z);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.localPosition = originalPos;
+    }
+
     void Update()
     {
-        if(isGrounded && canEnter==1)
-        {
-            // Debug.Log("Player is grounded");
-            canEnter = 2;
-        }
-        if(!isGrounded && canEnter==2)
-        {
-            // Debug.Log("Player is not grounded");
-            canEnter = 1;
-        }
-        
 
+        
         // Check if the player was not grounded in the previous frame but is now
         if (!wasGrounded && isGrounded)
         {
             float currentGroundedY = target.position.y;
-            // Debug.Log("previousGroundedY: " + previousGroundedY + " currentGroundedY: " + currentGroundedY);
             yGroundedDifference = currentGroundedY - previousGroundedY;
-
-            if (yGroundedDifference > 0)
-            {
-                // Debug.Log("Player has moved UP");
-            }
-            else if (yGroundedDifference < 0)
-            {
-                // Debug.Log("Player has moved DOWN");
-            }
 
             // Update the previous grounded position
             previousGroundedY = currentGroundedY;
@@ -102,7 +98,7 @@ public class CameraBehavior : MonoBehaviour
 
         if(yGroundedDifference > 0 || target.position.x < 30 || target.position.y < -25)
         {
-            Debug.Log("Player has moved UP");
+
             if (target.position.y > transform.position.y + yOffset ) // If above the center line
             {
                 // Debug.Log("Above center line");
@@ -116,7 +112,7 @@ public class CameraBehavior : MonoBehaviour
         }
         else
         {
-            Debug.Log("Player has moved DOWN");
+
             if (target.position.y > transform.position.y + 2*yOffset) 
             {
                 // Debug.Log("Above center line");
