@@ -153,6 +153,7 @@ public class Skeleton : MonoBehaviour
         if (id == gameObjectId)
         {
             life -= damage;
+            AudioManager.instance.PlaySound("SkeletonHit");
             flashEffect.Flash();
             if (life <= 0)
             {

@@ -244,4 +244,12 @@ public class PlayerController : MonoBehaviour
     {
         paused = isPaused;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Gate"))
+        {
+            SceneLoaderManager.instance.LoadScene("BossScene");
+        }
+    }
 }

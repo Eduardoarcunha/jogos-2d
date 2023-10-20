@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
             case GameState.Play:
                 if (oldGameState != GameState.LevelUp)
                 {
+                    AudioManager.instance.StopSound("MenuMusic");
                     SceneLoaderManager.instance.LoadScene("DarkFireCastle");
                 }
                 break;

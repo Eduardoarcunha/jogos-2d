@@ -183,6 +183,7 @@ public class Bat : MonoBehaviour
     private void TakeDamage(int id, int damage)
     {
         if (id == gameObjectId){
+            AudioManager.instance.PlaySound("BatHit");
             life -= damage;
             flashEffect.Flash();
             if (life <= 0)
