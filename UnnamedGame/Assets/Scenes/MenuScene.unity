@@ -1044,6 +1044,12 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: SkeletonHit
+    clip: {fileID: 8300000, guid: 7e6ca38c294d91c42b0bb75e3a1de905, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!4 &821952677
 Transform:
   m_ObjectHideFlags: 0
