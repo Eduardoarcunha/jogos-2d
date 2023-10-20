@@ -23,14 +23,15 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            ChangeState(GameState.Menu);
         } else {
             Destroy(gameObject);
         }
     }
 
     void Start()
-    {
-        ChangeState(GameState.Menu);
+    {   
+        PlayerCombat.OnDeathEvent += PlayerDeath;
     }
 
     void Update(){
@@ -72,6 +73,10 @@ public class GameManager : MonoBehaviour
         OnAfterGameStateChange?.Invoke(gameState);
     }
 
+    public void PlayerDeath(){
+        ChangeState(GameState.GameOver);
+    }
+
     public void PauseOrResume(){
         paused = !paused;
         OnPauseOrResumeGame?.Invoke(paused);
@@ -86,4 +91,8 @@ public class GameManager : MonoBehaviour
         GameOver = 4
     }
 
+    void OnDestroy()
+    {
+        PlayerCombat.OnDeathEvent -= PlayerDeath;
+    }
 }

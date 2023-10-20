@@ -43,6 +43,7 @@ public class Goblin : MonoBehaviour
     private float attackCooldown = 1.5f;
     private float attackCooldownRemaining = 0f;
     private float attackRange = .8f;
+    private bool aware = false;
 
     private void Awake()
     {
@@ -63,12 +64,24 @@ public class Goblin : MonoBehaviour
 
     private void Update()
     {
+        RaycastHit2D hit = Physics2D.Raycast(raycastPoint.position, new Vector2(Mathf.Sign(transform.localScale.x) * 1, 0), 6f, playerMask);
+        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        {
+            aware = true;
+        }
+        
         signPlayerToGoblin = Mathf.Sign(player.transform.position.x - transform.position.x);
         if (!isDead) UpdateAnimator();
     }
 
     private void FixedUpdate()
     {
+        if (!aware) return;
+        if (Vector2.Distance(transform.position, player.transform.position) > chaseRange)
+        {
+            aware = false;
+            return;
+        }
         HandleMovementAndAttacks();
     }
 

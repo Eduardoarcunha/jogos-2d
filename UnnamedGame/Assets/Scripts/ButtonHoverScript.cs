@@ -30,18 +30,18 @@ public class ButtonHoverScript : MonoBehaviour, IPointerEnterHandler, IPointerEx
         // Smoothly adjust the scale
         if (isHovering)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, hoverScale, Time.deltaTime * scaleSpeed);
+            transform.localScale = Vector3.Lerp(transform.localScale, hoverScale, Time.unscaledDeltaTime * scaleSpeed);
             if (buttonText != null)
             {
-                buttonText.color = Color.Lerp(buttonText.color, hoverColor, Time.deltaTime * colorChangeSpeed);
+                buttonText.color = Color.Lerp(buttonText.color, hoverColor, Time.unscaledDeltaTime * colorChangeSpeed);
             }
         }
         else
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * scaleSpeed);
+            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.unscaledDeltaTime * scaleSpeed);
             if (buttonText != null)
             {
-                buttonText.color = Color.Lerp(buttonText.color, originalColor, Time.deltaTime * colorChangeSpeed);
+                buttonText.color = Color.Lerp(buttonText.color, originalColor, Time.unscaledDeltaTime * colorChangeSpeed);
             }
         }
     }
@@ -55,5 +55,15 @@ public class ButtonHoverScript : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovering = false;
+    }
+
+    public void ReturnToMenu()
+    {
+        GameManager.instance.ChangeState(GameManager.GameState.Menu);
+    }
+
+    public void RestartGame()
+    {
+        GameManager.instance.ChangeState(GameManager.GameState.Play);
     }
 }
