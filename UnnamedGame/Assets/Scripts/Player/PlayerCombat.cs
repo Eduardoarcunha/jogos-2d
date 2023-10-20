@@ -9,6 +9,8 @@ public class PlayerCombat : MonoBehaviour
     public static event Action OnEndAttackEvent;
     public static event Action OnDeathEvent;
 
+    public CameraBehavior cameraBh;
+
     [Header("References")]
     public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
     public Bar healthBar;
@@ -102,6 +104,9 @@ public class PlayerCombat : MonoBehaviour
         animator.SetTrigger(attackType);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        if (hitEnemies.Length == 0) return;
+
+        StartCoroutine(cameraBh.Shake(0.5f, 0.01f));
         foreach (Collider2D enemy in hitEnemies)
         {
             if (enemy.CompareTag("Enemy")) OnHitEnemyEvent?.Invoke(enemy.gameObject.GetInstanceID(), damage);
