@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6772832977187939304}
   - component: {fileID: 8972829699326010972}
   - component: {fileID: 1107665268608590118}
-  m_Layer: 12
+  m_Layer: 7
   m_Name: FireMeteor
   m_TagString: Projectile
   m_Icon: {fileID: 0}

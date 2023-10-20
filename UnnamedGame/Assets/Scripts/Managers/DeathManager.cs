@@ -15,14 +15,21 @@ public class DeathManager : MonoBehaviour
     {
         if (newGameState == GameManager.GameState.GameOver)
         {
-            death.SetActive(true);
-            Time.timeScale = 0f;
+            StartCoroutine(DeadScreen());
         }
         else
         {
             death.SetActive(false);
             Time.timeScale = 1f;
         }
+    }
+
+    IEnumerator DeadScreen()
+    {
+        yield return new WaitForSeconds(2f);
+        death.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        Time.timeScale = 0f;
     }
 
 
