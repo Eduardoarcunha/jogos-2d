@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GameOver:
                 break;
+            case GameState.WonGame:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gameState), gameState, null);
         }
@@ -89,7 +91,8 @@ public class GameManager : MonoBehaviour
         Tutorial = 1,
         Play = 2,
         LevelUp = 3,
-        GameOver = 4
+        GameOver = 4,
+        WonGame = 5
     }
 
     void OnDestroy()

@@ -351,5 +351,6 @@ public class Rival : MonoBehaviour
         boxCollider.enabled = false;
         isDead = true;
         animator.SetTrigger("deathTrigger");
+        GameManager.instance.ChangeState(GameManager.GameState.WonGame);
     }
 }

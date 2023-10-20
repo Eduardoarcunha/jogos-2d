@@ -106,7 +106,7 @@ public class PlayerCombat : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         if (hitEnemies.Length == 0) return;
 
-        StartCoroutine(cameraBh.Shake(0.5f, 0.01f));
+        // StartCoroutine(cameraBh.Shake(0.1f, 0.2f));
         foreach (Collider2D enemy in hitEnemies)
         {
             if (enemy.CompareTag("Enemy")) OnHitEnemyEvent?.Invoke(enemy.gameObject.GetInstanceID(), damage);
