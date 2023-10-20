@@ -180,6 +180,7 @@ public class Goblin : MonoBehaviour
     private void TakeDamage(int id, int damage)
     {
         if (id == gameObjectId){
+            AudioManager.instance.PlaySound("GoblinHit");
             life -= damage;
             flashEffect.Flash();
             if (life <= 0)

@@ -1021,8 +1021,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: Jump
-    clip: {fileID: 8300000, guid: 1b4fb52bd50bf4d49819a6e6bf3e88e6, type: 3}
-    volume: 0.6
+    clip: {fileID: 8300000, guid: 3c45fd8f63405d54ea31fb7020af2d72, type: 3}
+    volume: 0.7
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -1045,7 +1045,19 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   - name: SkeletonHit
-    clip: {fileID: 8300000, guid: 7e6ca38c294d91c42b0bb75e3a1de905, type: 3}
+    clip: {fileID: 8300000, guid: 0fe73ca0a2eed034ca7d118f6e6fe7ca, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BatHit
+    clip: {fileID: 8300000, guid: 5b4fe9037ecb4c849b2640c485b22df0, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: GoblinHit
+    clip: {fileID: 8300000, guid: 7745f21f65303e04daffc5ea28345db7, type: 3}
     volume: 0.8
     pitch: 1
     loop: 0

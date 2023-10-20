@@ -32,4 +32,5 @@ public class MenuManager : MonoBehaviour
         AudioManager.instance.StopSound("MenuMusic");
         GameManager.instance.ChangeState(GameManager.GameState.Tutorial);
     }
+
 }
