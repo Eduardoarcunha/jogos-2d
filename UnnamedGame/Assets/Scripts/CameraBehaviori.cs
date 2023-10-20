@@ -100,7 +100,7 @@ public class CameraBehavior : MonoBehaviour
 
         // Calculate Y position
 
-        if(yGroundedDifference > 0 || target.position.x < 43)
+        if(yGroundedDifference > 0 || target.position.x < 30 || target.position.y < -25)
         {
             Debug.Log("Player has moved UP");
             if (target.position.y > transform.position.y + yOffset ) // If above the center line
@@ -122,7 +122,7 @@ public class CameraBehavior : MonoBehaviour
                 // Debug.Log("Above center line");
                 desiredPosition.y = target.position.y + yOffset; 
             }
-            else if (target.position.y < transform.position.y) 
+            else if (target.position.y < transform.position.y+ yOffset) 
             {
                 // Debug.Log("Below center line");
                 desiredPosition.y = target.position.y - yOffset;
