@@ -279,16 +279,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbef3a22ed4587047abd13a8a9f0654c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraBh: {fileID: 0}
   flashEffect: {fileID: 1286963780124691618}
   healthBar: {fileID: 0}
   staminaBar: {fileID: 0}
-  maxLife: 5
+  maxLife: 10
   maxStamina: 100
-  life: 0
-  stamina: 0
+  life: 10
+  stamina: 100
   attackPoint: {fileID: 4575411813889867489}
   attackRange: 0.4
-  damage: 1
+  damage: 3
   knockbackForce: {x: 3, y: 2}
   enemyLayers:
     serializedVersion: 2

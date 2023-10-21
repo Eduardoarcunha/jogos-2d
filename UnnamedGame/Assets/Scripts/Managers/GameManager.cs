@@ -23,15 +23,25 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            ChangeState(GameState.Menu);
+            
         } else {
             Destroy(gameObject);
         }
+        
+        PlayerCombat.OnDeathEvent += PlayerDeath;
     }
 
     void Start()
     {   
-        PlayerCombat.OnDeathEvent += PlayerDeath;
+        if (SceneManager.GetActiveScene().name == "MenuScene"){
+            ChangeState(GameState.Menu);
+            AudioManager.instance.PlaySound("MenuMusic");
+        }
+        else if (SceneManager.GetActiveScene().name == "TutorialScene") ChangeState(GameState.Tutorial);
+        else if (SceneManager.GetActiveScene().name == "DarkFireCastle") ChangeState(GameState.Play);
+        else if (SceneManager.GetActiveScene().name == "GameOverScene") ChangeState(GameState.GameOver);
+        else if (SceneManager.GetActiveScene().name == "WonGameScene") ChangeState(GameState.WonGame);
+        else ChangeState(GameState.Menu);
     }
 
     void Update(){
@@ -52,6 +62,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Menu:
                 SceneLoaderManager.instance.LoadScene("MenuScene");
+                AudioManager.instance.PlaySound("MenuMusic");
                 break;
             case GameState.Tutorial:
                 SceneLoaderManager.instance.LoadScene("TutorialScene");

@@ -17,9 +17,9 @@ public class Goblin : MonoBehaviour
     private float chaseRange = 5f;
     private float attackPoint1Range = 0.5f;
     private float attackPoint2Range = 0.5f;
-    private float life = 4;
-    private int attack1Damage = 2;
-    private int expPoints = 9;
+    private float life = 10;
+    private int attack1Damage = 3;
+    private int expPoints = 5;
 
     [Header("Attack Settings")]
     private int nextAttack = 1;

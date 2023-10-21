@@ -16,7 +16,6 @@ public class CameraBehavior : MonoBehaviour
     public bool isGrounded; // This should probably be private and set via some other collision logic
     private float previousGroundedY;
     private bool wasGrounded;
-    private int canEnter = 1;
     private float yGroundedDifference;
  
 

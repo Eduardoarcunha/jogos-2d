@@ -220,7 +220,10 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Trigger");
         if (collision.gameObject.CompareTag("Projectile") && !isHitted) Hitted(collision.gameObject.transform, 1);
+        if (collision.gameObject.CompareTag("Spike") && !isHitted) Hitted(collision.gameObject.transform, 1);
+
     }
 
     private IEnumerator StaminaRecovery()
@@ -259,4 +262,5 @@ public class PlayerCombat : MonoBehaviour
     private void OnPauseOrResumeGame(bool value){
         paused = value;
     }
+
 }

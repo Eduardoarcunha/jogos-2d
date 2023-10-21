@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 583407670548183509}
   - component: {fileID: 4131659806383877098}
   - component: {fileID: 6476623334586421731}
-  - component: {fileID: 6678669120822162087}
   - component: {fileID: 6872539521515896420}
   - component: {fileID: 3397681267204596757}
+  - component: {fileID: 2858036240113753945}
   m_Layer: 7
   m_Name: Rival
   m_TagString: Enemy
@@ -184,46 +184,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6678669120822162087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1161881781015158713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81484e690f30c0042bdd6914c61bea13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  playerMask: 0
-  attackPoint: {fileID: 8721298681235034057}
-  flashEffect: {fileID: 3397681267204596757}
-  healthBar: {fileID: 0}
-  fireMeteorPrefab: {fileID: 3233107207497019926, guid: 1ee97e3c9273602478ea5dcbc2fc9e27, type: 3}
-  slashPrefab: {fileID: 6063829300873929948, guid: f2f08244503e61c4a8782c75d9c5fb5f, type: 3}
-  gameObjectId: 0
-  maxLife: 5
-  life: 5
-  isDead: 0
-  canAttack: 1
-  speed: 3
-  safeDistance: 4
-  attackHitBox: 0.5
-  closeAttackRange: 1.8
-  longAttackRange: 3
-  allAttacksCooldown: 5
-  attack1Cooldown: 30
-  attack2Cooldown: 30
-  attack3Cooldown: 30
-  attack4Cooldown: 60
-  allAttacksCooldownRemaining: 0
-  attack1CooldownRemaining: 0
-  attack2CooldownRemaining: 0
-  attack3CooldownRemaining: 0
-  attack4CooldownRemaining: 0
-  playerIsDead: 0
 --- !u!114 &6872539521515896420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +211,43 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: 07adf1bdd49bad74b89dc4da8b6699b4, type: 2}
   duration: 0.3
   oscillationSpeed: 1
+--- !u!114 &2858036240113753945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161881781015158713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c1125fb93715dc4ea373af3123ffe23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  flashEffect: {fileID: 3397681267204596757}
+  healthBar: {fileID: 0}
+  attackPoint: {fileID: 8721298681235034057}
+  fireMeteorPrefab: {fileID: 3233107207497019926, guid: 1ee97e3c9273602478ea5dcbc2fc9e27, type: 3}
+  slashPrefab: {fileID: 6063829300873929948, guid: f2f08244503e61c4a8782c75d9c5fb5f, type: 3}
+  safeDistance: 4
+  attackHitBox: 0.5
+  closeAttackRange: 1.8
+  longAttackRange: 3
+  allAttacksCooldown: 20
+  attack1Cooldown: 70
+  attack2Cooldown: 30
+  attack3Cooldown: 30
+  attack4Cooldown: 100
+  allAttacksCooldownRemaining: 0
+  attack1CooldownRemaining: 0
+  attack2CooldownRemaining: 0
+  attack3CooldownRemaining: 0
+  attack4CooldownRemaining: 0
+  maxLife: 50
+  life: 0
+  isDead: 0
+  speed: 3
+  playerIsDead: 0
 --- !u!1 &8840341789125544395
 GameObject:
   m_ObjectHideFlags: 0

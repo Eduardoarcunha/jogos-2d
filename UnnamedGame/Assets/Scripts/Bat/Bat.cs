@@ -16,10 +16,10 @@ public class Bat : MonoBehaviour
     [Header("Properties")]
     private float speed = 3f;
     [SerializeField] private float chaseRange = 5f;
-    [SerializeField] private float attackPoint2Range = 0.5f;
-    private float life = 5;
-    private int attack2Damage = 2;
-    private int expPoints = 2;
+    [SerializeField] private float attackPoint2Range = 0.8f;
+    private float life = 6;
+    private int attack2Damage = 4;
+    private int expPoints = 3;
 
     [Header("Attack Settings")]
     private int nextAttack = 1;
