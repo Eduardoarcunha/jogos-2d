@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
     {
         if (newGameState == GameManager.GameState.WonGame)
         {
-            endGameTitleText.text = "You Won!";
+            endGameTitleText.text = "You Win!";
             StartCoroutine(EndGame());
         }
         else if (newGameState == GameManager.GameState.GameOver)
