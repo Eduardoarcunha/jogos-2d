@@ -11,6 +11,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text endGameTitleText;
     [SerializeField] private GameObject pausePanel;
 
+    [Header("UI Elements")]
+    [SerializeField] private GameObject loreCanvas;
+    public TMP_Text loreText;
+    public float typingSpeed = 0.05f;
+    public float delayAfterComplete = 2.0f;
+    
+    [Header("Lore Content")]
+    [TextArea(5, 10)]
+    public string loreContent;
+
     void Awake()
     {
         if (instance == null)
@@ -62,6 +72,26 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void InitializeGame()
+    {
+        loreCanvas.SetActive(true);
+        StartCoroutine(DisplayLore());
+    }
+
+    IEnumerator DisplayLore()
+    {
+        loreText.text = "";
+        for (int i = 0; i < loreContent.Length; i++)
+        {
+            loreText.text += loreContent[i];
+            yield return new WaitForSeconds(typingSpeed);
+        }
+
+        yield return new WaitForSeconds(delayAfterComplete);
+        loreCanvas.SetActive(false);
+        GameManager.instance.ChangeState(GameManager.GameState.Play);
+    }
+
     IEnumerator EndGame()
     {
         yield return new WaitForSeconds(2f);
@@ -69,6 +99,8 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Time.timeScale = 0f;
     }
+
+
 
     void OnDestroy()
     {

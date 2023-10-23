@@ -115,6 +115,11 @@ public class ButtonHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         ProgressionManager.instance.IncreaseSpeed();
     }
 
+    public void InitializeGame()
+    {
+        UIManager.instance.InitializeGame();
+    }
+
 
     #endregion
 }
