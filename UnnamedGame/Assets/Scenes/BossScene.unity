@@ -11724,6 +11724,207 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048208229}
   m_CullTransparentMesh: 1
+--- !u!1 &1071303152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071303154}
+  - component: {fileID: 1071303153}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1071303153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071303152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1ae65c07e6eab64fb279d01cf0deab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: MenuMusic
+    clip: {fileID: 8300000, guid: b59cfcb9ab2daf144964bae3b1ac3e7f, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: ButtonHover
+    clip: {fileID: 8300000, guid: 6e2bdb6fadaa07542a7fbcb15a40397c, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Footsteps
+    clip: {fileID: 8300000, guid: f813eaac0fea3154f82b2de7f80eb9e8, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Jump
+    clip: {fileID: 8300000, guid: 3c45fd8f63405d54ea31fb7020af2d72, type: 3}
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Roll
+    clip: {fileID: 8300000, guid: 94926ce12818cec468602f3d5919f018, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SwordSwing
+    clip: {fileID: 8300000, guid: 5155a74bcc03e084f92355e4c6b50ad6, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Heal
+    clip: {fileID: 8300000, guid: 7e6ca38c294d91c42b0bb75e3a1de905, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonHit
+    clip: {fileID: 8300000, guid: 2fe1f302b477b9443a747e1c18e4710e, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BatHit
+    clip: {fileID: 8300000, guid: 5b4fe9037ecb4c849b2640c485b22df0, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: GoblinHit
+    clip: {fileID: 8300000, guid: 7745f21f65303e04daffc5ea28345db7, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: HeartBeat
+    clip: {fileID: 8300000, guid: ba85e9303411670439675b48b7d2b188, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: PlayerHit
+    clip: {fileID: 8300000, guid: bc93b5debe3c7214d928e0dca8d2c413, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonStabHit
+    clip: {fileID: 8300000, guid: 0dd69bce8e4c4964db255e29eb372274, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonWalk
+    clip: {fileID: 8300000, guid: a68eebc95fb30e146adb6fddbd24641d, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: SkeletonSlice
+    clip: {fileID: 8300000, guid: 03802387043d62841b9c67e59b198c6d, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BonesFalling
+    clip: {fileID: 8300000, guid: 5b80dc77fad21a047a48309c07089d06, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BatWings
+    clip: {fileID: 8300000, guid: c86583093dca83c468bb3c9a73abf0f1, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BatProjectile
+    clip: {fileID: 8300000, guid: 6e2bdb6fadaa07542a7fbcb15a40397c, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Key
+    clip: {fileID: 8300000, guid: 9f57441dbae3c8548ba931a8619f8b5d, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: GoblinBomb
+    clip: {fileID: 8300000, guid: 81a2f67893cf32f459c5af70902c7248, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Meteor
+    clip: {fileID: 8300000, guid: 3b0a96110e4dc8548be393e94294e7ee, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossFire
+    clip: {fileID: 8300000, guid: 81a2f67893cf32f459c5af70902c7248, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: DoublePierce
+    clip: {fileID: 8300000, guid: 31339f617ea230f45bd51102d2b79dbc, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossDeathScream
+    clip: {fileID: 8300000, guid: bee920676e37cb14099becd0902790a5, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossSword
+    clip: {fileID: 8300000, guid: 38ed6e45a41a81446bc92a5389b5d16a, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossHit
+    clip: {fileID: 8300000, guid: 7600d6432b65f974e85e63e84793e635, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+--- !u!4 &1071303154
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071303152}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.5027714, y: 2.9248776, z: 2.340022}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1071967072
 GameObject:
   m_ObjectHideFlags: 0
@@ -35782,111 +35983,6 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
---- !u!1 &1629834026
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1629834028}
-  - component: {fileID: 1629834027}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1629834027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1629834026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1ae65c07e6eab64fb279d01cf0deab9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-  - name: MenuMusic
-    clip: {fileID: 8300000, guid: b59cfcb9ab2daf144964bae3b1ac3e7f, type: 3}
-    volume: 0.1
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: ButtonHover
-    clip: {fileID: 8300000, guid: 6e2bdb6fadaa07542a7fbcb15a40397c, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Footsteps
-    clip: {fileID: 8300000, guid: f813eaac0fea3154f82b2de7f80eb9e8, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: Jump
-    clip: {fileID: 8300000, guid: 3c45fd8f63405d54ea31fb7020af2d72, type: 3}
-    volume: 0.7
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Roll
-    clip: {fileID: 8300000, guid: 94926ce12818cec468602f3d5919f018, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: SwordSwing
-    clip: {fileID: 8300000, guid: 5155a74bcc03e084f92355e4c6b50ad6, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Heal
-    clip: {fileID: 8300000, guid: 7e6ca38c294d91c42b0bb75e3a1de905, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: SkeletonHit
-    clip: {fileID: 8300000, guid: 0fe73ca0a2eed034ca7d118f6e6fe7ca, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: BatHit
-    clip: {fileID: 8300000, guid: 5b4fe9037ecb4c849b2640c485b22df0, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: GoblinHit
-    clip: {fileID: 8300000, guid: 7745f21f65303e04daffc5ea28345db7, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
---- !u!4 &1629834028
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1629834026}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.5027714, y: 2.9248776, z: 2.340022}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1649956045
 GameObject:
   m_ObjectHideFlags: 0
@@ -44814,15 +44910,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: attack2Cooldown
-      value: 10
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: attack3Cooldown
-      value: 10
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: attack4Cooldown
-      value: 60
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: allAttacksCooldown
@@ -44877,7 +44973,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1629834028}
+  - {fileID: 1071303154}
   - {fileID: 200896047}
   - {fileID: 49620648}
   - {fileID: 1812524898}

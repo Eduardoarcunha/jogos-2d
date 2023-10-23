@@ -170,6 +170,7 @@ public class Goblin : MonoBehaviour
 
     private void OnEndAttack2()
     {
+        AudioManager.instance.PlaySound("GoblinBomb");
         attackCooldownRemaining = attackCooldown;
         GameObject bomb = Instantiate(bombPrefab, attackPoint1.position, Quaternion.identity);
         bomb.GetComponent<Rigidbody2D>().velocity = new Vector2(bombSpeed * Mathf.Sign(transform.localScale.x), 0);

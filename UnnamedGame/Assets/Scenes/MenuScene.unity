@@ -1995,6 +1995,60 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: BatProjectile
+    clip: {fileID: 8300000, guid: 6e2bdb6fadaa07542a7fbcb15a40397c, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Key
+    clip: {fileID: 8300000, guid: 9f57441dbae3c8548ba931a8619f8b5d, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: GoblinBomb
+    clip: {fileID: 8300000, guid: 81a2f67893cf32f459c5af70902c7248, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Meteor
+    clip: {fileID: 8300000, guid: 3b0a96110e4dc8548be393e94294e7ee, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossFire
+    clip: {fileID: 8300000, guid: 81a2f67893cf32f459c5af70902c7248, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: DoublePierce
+    clip: {fileID: 8300000, guid: 31339f617ea230f45bd51102d2b79dbc, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossDeathScream
+    clip: {fileID: 8300000, guid: bee920676e37cb14099becd0902790a5, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossSword
+    clip: {fileID: 8300000, guid: 38ed6e45a41a81446bc92a5389b5d16a, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BossHit
+    clip: {fileID: 8300000, guid: 7600d6432b65f974e85e63e84793e635, type: 3}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!4 &821952677
 Transform:
   m_ObjectHideFlags: 0
