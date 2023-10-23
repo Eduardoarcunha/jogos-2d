@@ -1,6 +1,6 @@
 # The Knight
 
-**Criadores:** Eduardo Araujo e Felipe Schiavinato
+**Criadores:** Eduardo Araujo, Felipe Schiavinato e Ricardo Israel
 
 ## Sobre o repositorio
 
