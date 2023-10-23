@@ -70,6 +70,8 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+
+
     // public void FadeOutAndStop(string name, float fadeTime)
     // {
     //     Sound s = Array.Find(sounds, sound => sound.name == name);

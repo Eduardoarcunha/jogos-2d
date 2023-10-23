@@ -224,11 +224,17 @@ public class Rival : MonoBehaviour
         ChangeState(CurrentStateEnum.Attack);
         if (cooldownRemaining1 <= 0 && cooldownRemaining2 > 0)
         {
+            if(trigger1 == "attack2Trigger") AudioManager.instance.PlaySound("BossSword");
+            else if(trigger1 == "attack3Trigger") AudioManager.instance.PlaySound("DoublePierce");
+
             TriggerAttack(trigger1, ref cooldownRemaining1, cooldown1);
             attackId = attackId1;
         }
         else if (cooldownRemaining1 > 0 && cooldownRemaining2 <= 0)
         {
+            if(trigger2 == "attack2Trigger") AudioManager.instance.PlaySound("BossSword");
+            else if(trigger2 == "attack3Trigger") AudioManager.instance.PlaySound("DoublePierce");
+
             TriggerAttack(trigger2, ref cooldownRemaining2, cooldown2);
             attackId = attackId2;
         }
@@ -237,11 +243,15 @@ public class Rival : MonoBehaviour
             int random = Random.Range(0, 2);
             if (random == 0)
             {
+                if(trigger1 == "attack2Trigger") AudioManager.instance.PlaySound("BossSword");
+                else if(trigger1 == "attack3Trigger") AudioManager.instance.PlaySound("DoublePierce");
                 TriggerAttack(trigger1, ref cooldownRemaining1, cooldown1);
                 attackId = attackId1;
             }
             else
             {
+                if(trigger2 == "attack2Trigger") AudioManager.instance.PlaySound("BossSword");
+                else if(trigger2 == "attack3Trigger") AudioManager.instance.PlaySound("DoublePierce");
                 TriggerAttack(trigger2, ref cooldownRemaining2, cooldown2);
                 attackId = attackId2;
             }
@@ -290,18 +300,29 @@ public class Rival : MonoBehaviour
 
     private void OnEndAttack1()
     {
+        AudioManager.instance.PlaySound("BossFire");
         GameObject slash = Instantiate(slashPrefab, attackPoint.position, Quaternion.identity);
         slash.GetComponent<Rigidbody2D>().velocity = new Vector2(5 * Mathf.Sign(transform.localScale.x), 0);
         ChangeState(CurrentStateEnum.Stay);
     }
 
-    private void OnEndAttack2() => ChangeState(CurrentStateEnum.RunTowards);
-    private void OnEndAttack3() => ChangeState(CurrentStateEnum.RunTowards);
+    private void OnEndAttack2()
+    {
+        
+        ChangeState(CurrentStateEnum.RunTowards);
+    } 
+    private void OnEndAttack3() 
+    {
+        
+        ChangeState(CurrentStateEnum.RunTowards);
+    }
 
     private void OnEndAttack4()
     {
+        AudioManager.instance.PlaySound("Meteor");
         for (int i = 0; i < 5; i++)
         {
+            
             Vector3 randomPosition = new Vector3(Random.Range(-10, 10), 5, 0);
             Vector2 randomSpeed = new Vector2(Random.Range(-1f,1f), -3f);
             float angle = Mathf.Atan2(randomSpeed.y, randomSpeed.x) * Mathf.Rad2Deg;
@@ -340,6 +361,7 @@ public class Rival : MonoBehaviour
 
     private void OnDeath()
     {
+        AudioManager.instance.PlaySound("BossDeathScream");
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0;
         boxCollider.enabled = false;
