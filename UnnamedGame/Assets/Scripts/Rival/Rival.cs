@@ -53,7 +53,7 @@ public class Rival : MonoBehaviour
 
     private Dictionary<int, int> attackIdToDamage = new Dictionary<int, int>()
     {
-        {1, 2},
+        {1, 2}, 
         {2, 3},
         {3, 3},
         {4, 4}
@@ -251,6 +251,7 @@ public class Rival : MonoBehaviour
     private void OnHitAttack()
     {
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackHitBox, playerMask);
+        if (hitObjects.Length == 0) return;
         foreach (Collider2D obj in hitObjects)
         {
             obj.GetComponent<PlayerCombat>().Hitted(transform, attackIdToDamage[attackId]);
