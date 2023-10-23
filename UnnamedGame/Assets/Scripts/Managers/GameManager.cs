@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
         OnAfterGameStateChange?.Invoke(gameState);
     }
 
+
     public void PlayerDeath(){
         ChangeState(GameState.GameOver);
     }

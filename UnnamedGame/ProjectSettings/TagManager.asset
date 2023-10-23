@@ -9,6 +9,7 @@ TagManager:
   - Gate
   - Spike
   - ImageButton
+  - DeathCollider
   layers:
   - Default
   - TransparentFX

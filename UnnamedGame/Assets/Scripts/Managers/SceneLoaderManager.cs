@@ -32,9 +32,8 @@ public class SceneLoaderManager : MonoBehaviour
         do {
             await Task.Yield();
         } while (scene.progress < 0.9f);
-
+        loaderCanvas.SetActive(false);
         scene.allowSceneActivation = true;
         await Task.Delay(100);
-        loaderCanvas.SetActive(false);
     }
 }

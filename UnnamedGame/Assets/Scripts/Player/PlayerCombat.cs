@@ -40,7 +40,6 @@ public class PlayerCombat : MonoBehaviour
     private bool isHitted = false;
     private bool isDead = false;
     private bool paused = false;
-    private bool isDying = false;
     private bool attackCombo = false;
     private float immunityTime = 2f;
     private float immunityTimeRemaining = 0f;
@@ -119,7 +118,7 @@ public class PlayerCombat : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         if (hitEnemies.Length == 0) return;
 
-        StartCoroutine(cameraBh.Shake(0.5f, 0.05f));
+        StartCoroutine(cameraBh.Shake(0.3f, 0.01f));
         foreach (Collider2D enemy in hitEnemies)
         {
             if (enemy.CompareTag("Enemy")) OnHitEnemyEvent?.Invoke(enemy.gameObject.GetInstanceID(), damage);
@@ -166,6 +165,7 @@ public class PlayerCombat : MonoBehaviour
     public void Hitted(Transform enemyPos, int damage)
     {
         if (isDead || immunityTimeRemaining > 0) return;
+        StartCoroutine(cameraBh.Shake(0.3f, 0.05f));
         life -= damage;
         AudioManager.instance.PlaySound("PlayerHit");
         if (life < 4 && blinkRoutine == null)
@@ -241,9 +241,13 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger");
         if (collision.gameObject.CompareTag("Projectile") && !isHitted) Hitted(collision.gameObject.transform, 1);
         if (collision.gameObject.CompareTag("Spike") && !isHitted) Hitted(collision.gameObject.transform, 1);
+        if (collision.gameObject.CompareTag("DeathCollider"))
+        {
+            isDead = true;
+            OnDeathEvent?.Invoke();
+        }
 
     }
 

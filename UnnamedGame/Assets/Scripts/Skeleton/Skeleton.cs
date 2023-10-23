@@ -35,7 +35,6 @@ public class Skeleton : MonoBehaviour
     private bool isAttacking = false;
     private bool isDead = false;
     private bool aware = false;
-    private bool isMoving = false;
 
     private void Awake()
     {

@@ -20,7 +20,7 @@ public class CameraBehavior : MonoBehaviour
     private float yGroundedDifference;
     private bool isShaking = false;
     public Image redPanel; // Drag your red UI panel here in the inspector
-    public float blinkDuration = 0.7f; // Duration of one blink (fade in and out)
+    public float blinkDuration = 1f; // Duration of one blink (fade in and out)
 
 
     void Start()
@@ -41,8 +41,6 @@ public class CameraBehavior : MonoBehaviour
 
     public IEnumerator Shake(float duration, float magnitude)
     {
-
-        Debug.Log("Shake");
         Vector3 originalPos = transform.localPosition;
         float elapsed = 0.0f;
         while (elapsed < duration)
@@ -56,41 +54,39 @@ public class CameraBehavior : MonoBehaviour
         transform.localPosition = originalPos;
     }
 
-public void ResetPanelColor()
-{
-    redPanel.color = new Color(0.2824f, 0, 0, 0); // Reset to transparent color
-}
-
-public IEnumerator BlinkRoutine()
-{
-    Color startColor = new Color(0.2824f, 0, 0, 0.2118f/2);      // Start with 0 alpha
-    Color targetColor = new Color(0.2824f, 0, 0, 0.2118f); // Target alpha of 0.2118
-
-    while (true) // Loop indefinitely
+    public void ResetPanelColor()
     {
-        float elapsed = 0;
+        redPanel.color = new Color(0.2824f, 0, 0, 0); // Reset to transparent color
+    }
 
-        // Fade in
-        while (elapsed < blinkDuration / 2)
+    public IEnumerator BlinkRoutine()
+    {
+        Color startColor = new Color(0.2824f, 0, 0, 0.2118f/2);      // Start with 0 alpha
+        Color targetColor = new Color(0.2824f, 0, 0, 0.2118f); // Target alpha of 0.2118
+
+        while (true) // Loop indefinitely
         {
-            elapsed += Time.deltaTime;
-            redPanel.color = Color.Lerp(startColor, targetColor, elapsed / (blinkDuration / 2));
-            yield return null;
-        }
+            float elapsed = 0;
 
-        elapsed = 0;
+            // Fade in
+            while (elapsed < blinkDuration / 2)
+            {
+                elapsed += Time.deltaTime;
+                redPanel.color = Color.Lerp(startColor, targetColor, elapsed / (blinkDuration / 2));
+                yield return null;
+            }
 
-        // Fade out
-        while (elapsed < blinkDuration / 2)
-        {
-            elapsed += Time.deltaTime;
-            redPanel.color = Color.Lerp(targetColor, startColor, elapsed / (blinkDuration / 2));
-            yield return null;
+            elapsed = 0;
+
+            // Fade out
+            while (elapsed < blinkDuration / 2)
+            {
+                elapsed += Time.deltaTime;
+                redPanel.color = Color.Lerp(targetColor, startColor, elapsed / (blinkDuration / 2));
+                yield return null;
+            }
         }
     }
-}
-
-
 
     void Update()
     {

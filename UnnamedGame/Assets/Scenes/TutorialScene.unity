@@ -911,7 +911,6 @@ GameObject:
   m_Component:
   - component: {fileID: 225825880}
   - component: {fileID: 225825879}
-  - component: {fileID: 225825878}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -919,14 +918,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &225825878
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 225825877}
-  m_Enabled: 1
 --- !u!20 &225825879
 Camera:
   m_ObjectHideFlags: 0
@@ -937,7 +928,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.105882354, g: 0.10980392, b: 0.11764706, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1237,7 +1228,7 @@ GameObject:
   - component: {fileID: 310651430}
   - component: {fileID: 310651429}
   - component: {fileID: 310651428}
-  - component: {fileID: 310651427}
+  - component: {fileID: 310651432}
   m_Layer: 5
   m_Name: TryAgainBtn
   m_TagString: Untagged
@@ -1265,20 +1256,6 @@ RectTransform:
   m_AnchoredPosition: {x: 50, y: -21.25}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &310651427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 310651425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04842cfaa2db8e34aba5a0943b92d7b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverScale: {x: 1.1, y: 1.1, z: 1.1}
-  hoverColor: {r: 0.8627451, g: 0.6313726, b: 0.11372549, a: 1}
 --- !u!95 &310651428
 Animator:
   serializedVersion: 5
@@ -1344,8 +1321,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 310651427}
-        m_TargetAssemblyTypeName: ButtonHoverScript, Assembly-CSharp
+      - m_Target: {fileID: 310651432}
+        m_TargetAssemblyTypeName: ButtonHandler, Assembly-CSharp
         m_MethodName: RestartGame
         m_Mode: 1
         m_Arguments:
@@ -1394,6 +1371,167 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310651425}
   m_CullTransparentMesh: 1
+--- !u!114 &310651432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310651425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306b1e7a9e2f80a43872ba09e5744b76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverScale: {x: 1.1, y: 1.1, z: 1.1}
+  hoverColor: {r: 0.8627451, g: 0.6313726, b: 0.11372549, a: 1}
+--- !u!1 &352369449
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 352369451}
+  - component: {fileID: 352369450}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &352369450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352369449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1ae65c07e6eab64fb279d01cf0deab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: MenuMusic
+    clip: {fileID: 8300000, guid: b59cfcb9ab2daf144964bae3b1ac3e7f, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: ButtonHover
+    clip: {fileID: 8300000, guid: 6e2bdb6fadaa07542a7fbcb15a40397c, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Footsteps
+    clip: {fileID: 8300000, guid: f813eaac0fea3154f82b2de7f80eb9e8, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Jump
+    clip: {fileID: 8300000, guid: 3c45fd8f63405d54ea31fb7020af2d72, type: 3}
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Roll
+    clip: {fileID: 8300000, guid: 94926ce12818cec468602f3d5919f018, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SwordSwing
+    clip: {fileID: 8300000, guid: 5155a74bcc03e084f92355e4c6b50ad6, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Heal
+    clip: {fileID: 8300000, guid: 7e6ca38c294d91c42b0bb75e3a1de905, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonHit
+    clip: {fileID: 8300000, guid: 2fe1f302b477b9443a747e1c18e4710e, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BatHit
+    clip: {fileID: 8300000, guid: 5b4fe9037ecb4c849b2640c485b22df0, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: GoblinHit
+    clip: {fileID: 8300000, guid: 7745f21f65303e04daffc5ea28345db7, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: HeartBeat
+    clip: {fileID: 8300000, guid: ba85e9303411670439675b48b7d2b188, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: PlayerHit
+    clip: {fileID: 8300000, guid: bc93b5debe3c7214d928e0dca8d2c413, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonStabHit
+    clip: {fileID: 8300000, guid: 0dd69bce8e4c4964db255e29eb372274, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonWalk
+    clip: {fileID: 8300000, guid: a68eebc95fb30e146adb6fddbd24641d, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: SkeletonSlice
+    clip: {fileID: 8300000, guid: 03802387043d62841b9c67e59b198c6d, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BonesFalling
+    clip: {fileID: 8300000, guid: 5b80dc77fad21a047a48309c07089d06, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BatWings
+    clip: {fileID: 8300000, guid: c86583093dca83c468bb3c9a73abf0f1, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+--- !u!4 &352369451
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352369449}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.5027714, y: 2.9248776, z: 2.340022}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &448875430
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,111 +1634,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &454953975
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 454953977}
-  - component: {fileID: 454953976}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &454953976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 454953975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1ae65c07e6eab64fb279d01cf0deab9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-  - name: MenuMusic
-    clip: {fileID: 8300000, guid: b59cfcb9ab2daf144964bae3b1ac3e7f, type: 3}
-    volume: 0.1
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: ButtonHover
-    clip: {fileID: 8300000, guid: 6e2bdb6fadaa07542a7fbcb15a40397c, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Footsteps
-    clip: {fileID: 8300000, guid: f813eaac0fea3154f82b2de7f80eb9e8, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: Jump
-    clip: {fileID: 8300000, guid: 3c45fd8f63405d54ea31fb7020af2d72, type: 3}
-    volume: 0.7
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Roll
-    clip: {fileID: 8300000, guid: 94926ce12818cec468602f3d5919f018, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: SwordSwing
-    clip: {fileID: 8300000, guid: 5155a74bcc03e084f92355e4c6b50ad6, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Heal
-    clip: {fileID: 8300000, guid: 7e6ca38c294d91c42b0bb75e3a1de905, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: SkeletonHit
-    clip: {fileID: 8300000, guid: 0fe73ca0a2eed034ca7d118f6e6fe7ca, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: BatHit
-    clip: {fileID: 8300000, guid: 5b4fe9037ecb4c849b2640c485b22df0, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: GoblinHit
-    clip: {fileID: 8300000, guid: 7745f21f65303e04daffc5ea28345db7, type: 3}
-    volume: 0.8
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
---- !u!4 &454953977
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 454953975}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.5027714, y: 2.9248776, z: 2.340022}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &491886078
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,9 +1779,8 @@ GameObject:
   - component: {fileID: 539699459}
   - component: {fileID: 539699464}
   - component: {fileID: 539699463}
-  - component: {fileID: 539699462}
   - component: {fileID: 539699461}
-  - component: {fileID: 539699460}
+  - component: {fileID: 539699465}
   m_Layer: 5
   m_Name: Resume
   m_TagString: Untagged
@@ -1776,18 +1808,6 @@ RectTransform:
   m_AnchoredPosition: {x: 79.58745, y: -115.29111}
   m_SizeDelta: {x: 200, y: 110.987404}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &539699460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 539699458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17b64ef046aaa264785af4cdeb46e768, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &539699461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1808,20 +1828,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &539699462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 539699458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cdb23df37562c548877eab33e20e6dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverScale: {x: 1.1, y: 1.1, z: 1.1}
-  hoverColor: {r: 0.8627451, g: 0.6313726, b: 0.11372549, a: 1}
 --- !u!114 &539699463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1866,9 +1872,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 539699460}
-        m_TargetAssemblyTypeName: PauseClick, Assembly-CSharp
-        m_MethodName: OnButtonClick
+      - m_Target: {fileID: 539699465}
+        m_TargetAssemblyTypeName: ButtonHandler, Assembly-CSharp
+        m_MethodName: PauseOrResume
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1886,6 +1892,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 539699458}
   m_CullTransparentMesh: 1
+--- !u!114 &539699465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539699458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306b1e7a9e2f80a43872ba09e5744b76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverScale: {x: 1.1, y: 1.1, z: 1.1}
+  hoverColor: {r: 0.8627451, g: 0.6313726, b: 0.11372549, a: 1}
 --- !u!1 &588366214
 GameObject:
   m_ObjectHideFlags: 0
@@ -2468,7 +2488,7 @@ Transform:
   m_GameObject: {fileID: 819463649}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7, y: 2.04, z: 0}
+  m_LocalPosition: {x: -7, y: 2, z: 0}
   m_LocalScale: {x: 2, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2561,7 +2581,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.21960784, g: 0.22352941, b: 0.2509804, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2849,7 +2869,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.21960784, g: 0.22352941, b: 0.2509804, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2993,7 +3013,7 @@ GameObject:
   - component: {fileID: 957938650}
   - component: {fileID: 957938649}
   - component: {fileID: 957938648}
-  - component: {fileID: 957938647}
+  - component: {fileID: 957938652}
   m_Layer: 5
   m_Name: MenuBtn
   m_TagString: Untagged
@@ -3021,20 +3041,6 @@ RectTransform:
   m_AnchoredPosition: {x: 50, y: -78.75}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &957938647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957938645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04842cfaa2db8e34aba5a0943b92d7b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverScale: {x: 1.1, y: 1.1, z: 1.1}
-  hoverColor: {r: 0.8627451, g: 0.6313726, b: 0.11372549, a: 1}
 --- !u!95 &957938648
 Animator:
   serializedVersion: 5
@@ -3100,8 +3106,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 957938647}
-        m_TargetAssemblyTypeName: ButtonHoverScript, Assembly-CSharp
+      - m_Target: {fileID: 957938652}
+        m_TargetAssemblyTypeName: ButtonHandler, Assembly-CSharp
         m_MethodName: ReturnToMenu
         m_Mode: 1
         m_Arguments:
@@ -3150,6 +3156,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957938645}
   m_CullTransparentMesh: 1
+--- !u!114 &957938652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957938645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306b1e7a9e2f80a43872ba09e5744b76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverScale: {x: 1.1, y: 1.1, z: 1.1}
+  hoverColor: {r: 0.8627451, g: 0.6313726, b: 0.11372549, a: 1}
 --- !u!1001 &1001485007
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3382,7 +3402,7 @@ Transform:
   m_GameObject: {fileID: 1069484124}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20, y: 2.04, z: 0}
+  m_LocalPosition: {x: 7, y: 2, z: 0}
   m_LocalScale: {x: 2, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3475,7 +3495,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.21960784, g: 0.22352941, b: 0.2509804, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5124,7 +5144,7 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 454953977}
+  - {fileID: 352369451}
   - {fileID: 165078488}
   - {fileID: 906387397}
   - {fileID: 1875215474}

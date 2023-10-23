@@ -27,11 +27,11 @@ public class Rival : MonoBehaviour
     [SerializeField] private float longAttackRange = 3f;
 
     // Cooldowns    
-    [SerializeField] private float allAttacksCooldown = 20f;
-    [SerializeField] private float attack1Cooldown = 70f;
-    [SerializeField] private float attack2Cooldown = 30f;
-    [SerializeField] private float attack3Cooldown = 30f;
-    [SerializeField] private float attack4Cooldown = 100f;
+    [SerializeField] private float allAttacksCooldown = 3f;
+    [SerializeField] private float attack1Cooldown = 60f;
+    [SerializeField] private float attack2Cooldown = 20f;
+    [SerializeField] private float attack3Cooldown = 20f;
+    [SerializeField] private float attack4Cooldown = 80f;
     [SerializeField] private float allAttacksCooldownRemaining = 0f;
     [SerializeField] private float attack1CooldownRemaining = 0f;
     [SerializeField] private float attack2CooldownRemaining = 0f;
@@ -53,10 +53,10 @@ public class Rival : MonoBehaviour
 
     private Dictionary<int, int> attackIdToDamage = new Dictionary<int, int>()
     {
-        {1, 1},
-        {2, 2},
-        {3, 2},
-        {4, 3}
+        {1, 2},
+        {2, 3},
+        {3, 3},
+        {4, 4}
     };
 
     public enum CurrentStateEnum
@@ -81,14 +81,9 @@ public class Rival : MonoBehaviour
 
     private void Start()
     {
-        maxLife = 10;
+        maxLife = 50;
         life = maxLife;
         healthBar.UpdateBar(life, maxLife);
-        allAttacksCooldown = 20f;
-        attack1Cooldown = 70f;
-        attack2Cooldown = 30f;
-        attack3Cooldown = 30f;
-        attack4Cooldown = 100f;
 
         PlayerCombat.OnDeathEvent += OnPlayerDeath;
         PlayerCombat.OnHitEnemyEvent += TakeDamage;
@@ -345,7 +340,6 @@ public class Rival : MonoBehaviour
 
     private void OnDeath()
     {
-        Debug.Log("Rival is dead");
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0;
         boxCollider.enabled = false;
