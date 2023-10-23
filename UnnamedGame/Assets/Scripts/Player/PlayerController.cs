@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private HealthPotions healthPotions; 
     private PlayerCombat playerCombat;   
     [SerializeField] private Transform groundCheck;    
+    [SerializeField] private GameObject keyUI;
 
     [Header("Properties")]
     [SerializeField] private float airPenalty = 0.9f;
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
 
     public static event Action<bool> OnChangeGroundedState;
+    public static event Action OnKeyCollect;
 
     void Start()
     {
@@ -247,6 +249,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.CompareTag("Key"))
+        {
+            OnKeyCollect?.Invoke();
+            Destroy(other.gameObject);
+            keyUI.SetActive(true);
+        }
+
         if (other.gameObject.CompareTag("Gate"))
         {
             SceneLoaderManager.instance.LoadScene("BossScene");
