@@ -77,7 +77,6 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.GameOver:
-                AudioManager.instance.StopSound("BossMusic");
                 break;
             case GameState.WonGame:
                 break;

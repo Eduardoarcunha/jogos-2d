@@ -260,6 +260,7 @@ public class PlayerController : MonoBehaviour
         {
             if (keyUI.activeSelf){
                 SceneLoaderManager.instance.LoadScene("BossScene");
+                AudioManager.instance.PlaySound("BossMusic");
             }            
         }
     }

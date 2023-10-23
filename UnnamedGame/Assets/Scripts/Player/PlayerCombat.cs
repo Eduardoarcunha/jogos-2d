@@ -111,6 +111,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void StartAttack(string attackType)
     {
+        decreaseStamina(2);
         isAttacking = true;        
         AudioManager.instance.PlaySound("SwordSwing");
         animator.SetTrigger(attackType);
@@ -282,6 +283,12 @@ public class PlayerCombat : MonoBehaviour
     public void IncreaseDamage()
     {
         damage++;
+    }
+
+    public void decreaseStamina(int amount)
+    {
+        stamina -= amount;
+        staminaBar.UpdateBar(stamina, maxStamina);
     }
 
     private void OnPauseOrResumeGame(bool value){
