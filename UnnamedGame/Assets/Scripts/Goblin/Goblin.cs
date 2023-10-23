@@ -17,9 +17,9 @@ public class Goblin : MonoBehaviour
     private float chaseRange = 5f;
     private float attackPoint1Range = 0.5f;
     private float attackPoint2Range = 0.5f;
-    private float life = 4;
-    private int attack1Damage = 2;
-    private int expPoints = 9;
+    private float life = 10;
+    private int attack1Damage = 3;
+    private int expPoints = 5;
 
     [Header("Attack Settings")]
     private int nextAttack = 1;
@@ -43,6 +43,7 @@ public class Goblin : MonoBehaviour
     private float attackCooldown = 1.5f;
     private float attackCooldownRemaining = 0f;
     private float attackRange = .8f;
+    private bool aware = false;
 
     private void Awake()
     {
@@ -63,12 +64,24 @@ public class Goblin : MonoBehaviour
 
     private void Update()
     {
+        RaycastHit2D hit = Physics2D.Raycast(raycastPoint.position, new Vector2(Mathf.Sign(transform.localScale.x) * 1, 0), 6f, playerMask);
+        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        {
+            aware = true;
+        }
+        
         signPlayerToGoblin = Mathf.Sign(player.transform.position.x - transform.position.x);
         if (!isDead) UpdateAnimator();
     }
 
     private void FixedUpdate()
     {
+        if (!aware) return;
+        if (Vector2.Distance(transform.position, player.transform.position) > chaseRange)
+        {
+            aware = false;
+            return;
+        }
         HandleMovementAndAttacks();
     }
 
@@ -167,6 +180,7 @@ public class Goblin : MonoBehaviour
     private void TakeDamage(int id, int damage)
     {
         if (id == gameObjectId){
+            AudioManager.instance.PlaySound("GoblinHit");
             life -= damage;
             flashEffect.Flash();
             if (life <= 0)

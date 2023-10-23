@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
@@ -17,7 +17,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TutorialScene.unity
     guid: f3e2a5d0b7a38424c845fb8d441305ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DarkFireCastleMecanicas.unity
-    guid: 657ead7c1b92bbc49908644d2a940fcc
+    guid: d69fc99345c06e24e83a133a18aee2c3
+  - enabled: 1
+    path: Assets/Scenes/DarkFireCastle.unity
+    guid: d5bc124dbd68fba46b6891255b287e1b
+  - enabled: 1
+    path: Assets/Scenes/BossScene.unity
+    guid: 6b78ec2a7bacdab4484cf5e389bbc240
   m_configObjects: {}

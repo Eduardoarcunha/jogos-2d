@@ -65,6 +65,7 @@ public class ProgressionManager : MonoBehaviour
         Time.timeScale = 1f;
         levelUpPanel.SetActive(false);
         GameManager.instance.ChangeState(GameManager.GameState.Play);
+        progressBar.UpdateBar(currentExp, currentExpToNextLevel);
     }
 
     public void IncreaseSpeed()
@@ -73,5 +74,6 @@ public class ProgressionManager : MonoBehaviour
         Time.timeScale = 1f;
         levelUpPanel.SetActive(false);
         GameManager.instance.ChangeState(GameManager.GameState.Play);
+        progressBar.UpdateBar(currentExp, currentExpToNextLevel);
     }
 }

@@ -23,14 +23,25 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            
         } else {
             Destroy(gameObject);
         }
+        
+        PlayerCombat.OnDeathEvent += PlayerDeath;
     }
 
     void Start()
-    {
-        ChangeState(GameState.Menu);
+    {   
+        if (SceneManager.GetActiveScene().name == "MenuScene"){
+            ChangeState(GameState.Menu);
+            AudioManager.instance.PlaySound("MenuMusic");
+        }
+        else if (SceneManager.GetActiveScene().name == "TutorialScene") ChangeState(GameState.Tutorial);
+        else if (SceneManager.GetActiveScene().name == "DarkFireCastle") ChangeState(GameState.Play);
+        else if (SceneManager.GetActiveScene().name == "GameOverScene") ChangeState(GameState.GameOver);
+        else if (SceneManager.GetActiveScene().name == "WonGameScene") ChangeState(GameState.WonGame);
+        else ChangeState(GameState.Menu);
     }
 
     void Update(){
@@ -50,26 +61,35 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Menu:
-                SceneManager.LoadScene("MenuScene");
+                SceneLoaderManager.instance.LoadScene("MenuScene");
+                AudioManager.instance.PlaySound("MenuMusic");
                 break;
             case GameState.Tutorial:
-                SceneManager.LoadScene("TutorialScene");
+                SceneLoaderManager.instance.LoadScene("TutorialScene");
                 break;
             case GameState.LevelUp:
                 break;
             case GameState.Play:
                 if (oldGameState != GameState.LevelUp)
                 {
-                    SceneManager.LoadScene("DarkFireCastleMecanicas");
+                    AudioManager.instance.StopSound("MenuMusic");
+                    SceneLoaderManager.instance.LoadScene("DarkFireCastle");
                 }
                 break;
             case GameState.GameOver:
+                break;
+            case GameState.WonGame:
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gameState), gameState, null);
         }
         
         OnAfterGameStateChange?.Invoke(gameState);
+    }
+
+
+    public void PlayerDeath(){
+        ChangeState(GameState.GameOver);
     }
 
     public void PauseOrResume(){
@@ -83,7 +103,12 @@ public class GameManager : MonoBehaviour
         Tutorial = 1,
         Play = 2,
         LevelUp = 3,
-        GameOver = 4
+        GameOver = 4,
+        WonGame = 5
     }
 
+    void OnDestroy()
+    {
+        PlayerCombat.OnDeathEvent -= PlayerDeath;
+    }
 }

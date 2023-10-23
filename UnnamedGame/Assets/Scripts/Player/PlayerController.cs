@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 10;
     [SerializeField] private float gravityScale = 2.5f;
     private int remainingPotions = 5;
-    private int potionHealAmount = 1;
+    private int potionHealAmount = 2;
 
     // State Variables
     private float horizontalInput;
@@ -254,6 +254,11 @@ public class PlayerController : MonoBehaviour
             OnKeyCollect?.Invoke();
             Destroy(other.gameObject);
             keyUI.SetActive(true);
+        }
+
+        if (other.gameObject.CompareTag("Gate"))
+        {
+            SceneLoaderManager.instance.LoadScene("BossScene");
         }
     }
 }

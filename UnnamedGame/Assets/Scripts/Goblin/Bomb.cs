@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    public int damage = 3;
+    private int damage = 4;
     private int playerMask;
 
     [SerializeField] private Transform explosionPoint;
@@ -29,7 +29,7 @@ public class Bomb : MonoBehaviour
 
         foreach (Collider2D obj in hitObjects)
         {
-            obj.GetComponent<PlayerCombat>().Hitted(transform, 3);
+            obj.GetComponent<PlayerCombat>().Hitted(transform, damage);
         }
 
     }
@@ -38,7 +38,7 @@ public class Bomb : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            collision.gameObject.GetComponent<PlayerCombat>().Hitted(transform, 2);
+            collision.gameObject.GetComponent<PlayerCombat>().Hitted(transform, damage);
 
             Destroy(gameObject);
         }

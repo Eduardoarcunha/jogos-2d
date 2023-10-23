@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BatProjectile : MonoBehaviour
 {
-    public int damage = 3;
+    private int damage = 3;
     private int playerMask;
 
     [SerializeField] private float explosionRadius = .5f;
@@ -28,7 +28,7 @@ public class BatProjectile : MonoBehaviour
 
         foreach (Collider2D obj in hitObjects)
         {
-            obj.GetComponent<PlayerCombat>().Hitted(transform, 3);
+            obj.GetComponent<PlayerCombat>().Hitted(transform, damage);
         }
 
     }
@@ -37,7 +37,7 @@ public class BatProjectile : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            collision.gameObject.GetComponent<PlayerCombat>().Hitted(transform, 2);
+            collision.gameObject.GetComponent<PlayerCombat>().Hitted(transform, damage);
 
             Destroy(gameObject);
         }

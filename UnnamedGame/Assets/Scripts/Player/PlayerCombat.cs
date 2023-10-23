@@ -9,6 +9,8 @@ public class PlayerCombat : MonoBehaviour
     public static event Action OnEndAttackEvent;
     public static event Action OnDeathEvent;
 
+    public CameraBehavior cameraBh;
+
     [Header("References")]
     public BarthaSzabolcs.Tutorial_SpriteFlash.SimpleFlash flashEffect;
     public Bar healthBar;
@@ -16,6 +18,7 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Properties")]
     [SerializeField] private int maxLife;
+    
     [SerializeField] private float maxStamina;
     [SerializeField] private int life;
     [SerializeField] private float stamina;
@@ -40,6 +43,8 @@ public class PlayerCombat : MonoBehaviour
     private bool attackCombo = false;
     private float immunityTime = 2f;
     private float immunityTimeRemaining = 0f;
+    private Coroutine blinkRoutine;
+
     private Animator animator;
 
     private void Start()
@@ -93,6 +98,15 @@ public class PlayerCombat : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) StartAttack("Attack1");
             if (Input.GetKeyDown(KeyCode.Space) && stamina > 20) Roll();
         }
+
+        if (life >= 4 && blinkRoutine != null)
+        {
+            AudioManager.instance.StopSound("HeartBeat");
+            StopCoroutine(blinkRoutine);
+            blinkRoutine = null; // Reset the reference
+            // Ensure the panel color is reset to its original state
+            cameraBh.ResetPanelColor();
+        }
     }
 
     private void StartAttack(string attackType)
@@ -102,6 +116,9 @@ public class PlayerCombat : MonoBehaviour
         animator.SetTrigger(attackType);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        if (hitEnemies.Length == 0) return;
+
+        StartCoroutine(cameraBh.Shake(0.3f, 0.01f));
         foreach (Collider2D enemy in hitEnemies)
         {
             if (enemy.CompareTag("Enemy")) OnHitEnemyEvent?.Invoke(enemy.gameObject.GetInstanceID(), damage);
@@ -148,12 +165,21 @@ public class PlayerCombat : MonoBehaviour
     public void Hitted(Transform enemyPos, int damage)
     {
         if (isDead || immunityTimeRemaining > 0) return;
+        StartCoroutine(cameraBh.Shake(0.3f, 0.05f));
         life -= damage;
+        AudioManager.instance.PlaySound("PlayerHit");
+        if (life < 4 && blinkRoutine == null)
+        {
+            blinkRoutine = StartCoroutine(cameraBh.BlinkRoutine());
+            AudioManager.instance.PlaySound("HeartBeat");
+        }
+        
         healthBar.UpdateBar(life, maxLife);
 
         StartCoroutine(StartImmunity());
 
         if (life <= 0) {
+            AudioManager.instance.StopSound("HeartBeat");
             OnDeathEvent?.Invoke();
             animator.SetTrigger("Death");
             isDead = true;
@@ -216,6 +242,13 @@ public class PlayerCombat : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Projectile") && !isHitted) Hitted(collision.gameObject.transform, 1);
+        if (collision.gameObject.CompareTag("Spike") && !isHitted) Hitted(collision.gameObject.transform, 1);
+        if (collision.gameObject.CompareTag("DeathCollider"))
+        {
+            isDead = true;
+            OnDeathEvent?.Invoke();
+        }
+
     }
 
     private IEnumerator StaminaRecovery()
@@ -254,4 +287,5 @@ public class PlayerCombat : MonoBehaviour
     private void OnPauseOrResumeGame(bool value){
         paused = value;
     }
+
 }

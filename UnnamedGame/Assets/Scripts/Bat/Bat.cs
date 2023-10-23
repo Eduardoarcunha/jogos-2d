@@ -15,11 +15,11 @@ public class Bat : MonoBehaviour
 
     [Header("Properties")]
     private float speed = 3f;
-    private float chaseRange = 5f;
-    [SerializeField] private float attackPoint2Range = 0.5f;
-    private float life = 5;
-    private int attack2Damage = 2;
-    private int expPoints = 2;
+    [SerializeField] private float chaseRange = 5f;
+    [SerializeField] private float attackPoint2Range = 0.8f;
+    private float life = 6;
+    private int attack2Damage = 4;
+    private int expPoints = 3;
 
     [Header("Attack Settings")]
     private int nextAttack = 1;
@@ -43,6 +43,7 @@ public class Bat : MonoBehaviour
     private float attackCooldown = 1f;
     private float attackCooldownRemaining = 0f;
     private float attackRange = .8f;
+    private bool aware = false;
 
     private void Awake()
     {
@@ -63,6 +64,11 @@ public class Bat : MonoBehaviour
 
     private void Update()
     {
+        RaycastHit2D hit = Physics2D.Raycast(raycastPoint.position, new Vector2(Mathf.Sign(transform.localScale.x) * 1, 0), 6f, playerMask);
+        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        {
+            aware = true;
+        }
         signPlayerToBat = Mathf.Sign(player.transform.position.x - transform.position.x);
         if (!isDead) UpdateAnimator();
 
@@ -70,6 +76,12 @@ public class Bat : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!aware) return;
+        if (Vector2.Distance(transform.position, player.transform.position) > chaseRange)
+        {
+            aware = false;
+            return;
+        }
         HandleMovementAndAttacks();
     }
 
@@ -163,7 +175,6 @@ public class Bat : MonoBehaviour
 
     private void OnEndAttack3()
     {
-        Debug.Log("OnEndAttack3");
         attackCooldownRemaining = attackCooldown;
         isAttacking = false;
     }
@@ -172,6 +183,7 @@ public class Bat : MonoBehaviour
     private void TakeDamage(int id, int damage)
     {
         if (id == gameObjectId){
+            AudioManager.instance.PlaySound("BatHit");
             life -= damage;
             flashEffect.Flash();
             if (life <= 0)
