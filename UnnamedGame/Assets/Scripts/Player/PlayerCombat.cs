@@ -18,6 +18,7 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Properties")]
     [SerializeField] private int maxLife;
+    
     [SerializeField] private float maxStamina;
     [SerializeField] private int life;
     [SerializeField] private float stamina;
@@ -39,9 +40,12 @@ public class PlayerCombat : MonoBehaviour
     private bool isHitted = false;
     private bool isDead = false;
     private bool paused = false;
+    private bool isDying = false;
     private bool attackCombo = false;
     private float immunityTime = 2f;
     private float immunityTimeRemaining = 0f;
+    private Coroutine blinkRoutine;
+
     private Animator animator;
 
     private void Start()
@@ -95,6 +99,15 @@ public class PlayerCombat : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) StartAttack("Attack1");
             if (Input.GetKeyDown(KeyCode.Space) && stamina > 20) Roll();
         }
+
+        if (life >= 4 && blinkRoutine != null)
+        {
+            AudioManager.instance.StopSound("HeartBeat");
+            StopCoroutine(blinkRoutine);
+            blinkRoutine = null; // Reset the reference
+            // Ensure the panel color is reset to its original state
+            cameraBh.ResetPanelColor();
+        }
     }
 
     private void StartAttack(string attackType)
@@ -106,7 +119,7 @@ public class PlayerCombat : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         if (hitEnemies.Length == 0) return;
 
-        // StartCoroutine(cameraBh.Shake(0.1f, 0.2f));
+        StartCoroutine(cameraBh.Shake(0.5f, 0.05f));
         foreach (Collider2D enemy in hitEnemies)
         {
             if (enemy.CompareTag("Enemy")) OnHitEnemyEvent?.Invoke(enemy.gameObject.GetInstanceID(), damage);
@@ -154,11 +167,19 @@ public class PlayerCombat : MonoBehaviour
     {
         if (isDead || immunityTimeRemaining > 0) return;
         life -= damage;
+        AudioManager.instance.PlaySound("PlayerHit");
+        if (life < 4 && blinkRoutine == null)
+        {
+            blinkRoutine = StartCoroutine(cameraBh.BlinkRoutine());
+            AudioManager.instance.PlaySound("HeartBeat");
+        }
+        
         healthBar.UpdateBar(life, maxLife);
 
         StartCoroutine(StartImmunity());
 
         if (life <= 0) {
+            AudioManager.instance.StopSound("HeartBeat");
             OnDeathEvent?.Invoke();
             animator.SetTrigger("Death");
             isDead = true;

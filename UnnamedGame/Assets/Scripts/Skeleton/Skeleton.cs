@@ -35,6 +35,7 @@ public class Skeleton : MonoBehaviour
     private bool isAttacking = false;
     private bool isDead = false;
     private bool aware = false;
+    private bool isMoving = false;
 
     private void Awake()
     {
@@ -135,11 +136,13 @@ public class Skeleton : MonoBehaviour
 
     private void OnHitAttack1()
     {
+        AudioManager.instance.PlaySound("SkeletonSlice");
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, 0.5f, playerMask);
         foreach (Collider2D obj in hitObjects)
         {
             obj.GetComponent<PlayerCombat>().Hitted(transform, attack1Damage);
         }
+        
     }
 
     private void OnEndAttack1()
@@ -171,6 +174,7 @@ public class Skeleton : MonoBehaviour
         isDead = true;
         animator.SetTrigger("deathTrigger");
         ProgressionManager.instance.AddExp(expPoints);
+        AudioManager.instance.PlaySound("BonesFalling");
     }
 
     private void DestroySkeleton()
