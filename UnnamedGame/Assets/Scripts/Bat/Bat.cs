@@ -127,6 +127,7 @@ public class Bat : MonoBehaviour
 
     private void StartRangedAttack()
     {
+        AudioManager.instance.PlaySound("BatProjectile");
         rb.velocity = Vector2.zero;
         isAttacking = true;
         animator.SetTrigger("Attack3Trigger");
