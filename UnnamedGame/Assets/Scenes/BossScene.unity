@@ -36789,6 +36789,11 @@ MonoBehaviour:
   endGameCanvas: {fileID: 587483817}
   endGameTitleText: {fileID: 961611138}
   pausePanel: {fileID: 1035271272}
+  loreCanvas: {fileID: 0}
+  loreText: {fileID: 0}
+  typingSpeed: 0.05
+  delayAfterComplete: 2
+  loreContent: 
 --- !u!4 &1812524898
 Transform:
   m_ObjectHideFlags: 0
@@ -44910,15 +44915,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: attack2Cooldown
-      value: 1000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: attack3Cooldown
-      value: 1000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: attack4Cooldown
-      value: 1000
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 2858036240113753945, guid: 476ba9c931c870441806c71b0a181c07, type: 3}
       propertyPath: allAttacksCooldown

@@ -2049,6 +2049,12 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: BossMusic
+    clip: {fileID: 8300000, guid: 75a49833651ab2e4180c42f5046bcd33, type: 3}
+    volume: 0.4
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!4 &821952677
 Transform:
   m_ObjectHideFlags: 0
@@ -2370,7 +2376,7 @@ MonoBehaviour:
   pausePanel: {fileID: 1145111910}
   loreCanvas: {fileID: 1464087763}
   loreText: {fileID: 432551417}
-  typingSpeed: 0.05
+  typingSpeed: 0.01
   delayAfterComplete: 3
   loreContent: 'In the reign named "Reign," a dark evil has emerged with a singular
     intention: chaos. As in every generic game, there exists a hero, a knight, an

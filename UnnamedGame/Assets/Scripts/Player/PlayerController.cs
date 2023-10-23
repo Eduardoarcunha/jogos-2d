@@ -258,7 +258,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("Gate"))
         {
-            SceneLoaderManager.instance.LoadScene("BossScene");
+            if (keyUI.activeSelf){
+                SceneLoaderManager.instance.LoadScene("BossScene");
+            }            
         }
     }
 }
