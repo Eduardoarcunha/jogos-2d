@@ -1919,7 +1919,7 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   - name: SkeletonHit
-    clip: {fileID: 8300000, guid: 0fe73ca0a2eed034ca7d118f6e6fe7ca, type: 3}
+    clip: {fileID: 8300000, guid: 2fe1f302b477b9443a747e1c18e4710e, type: 3}
     volume: 0.8
     pitch: 1
     loop: 0
@@ -1933,6 +1933,48 @@ MonoBehaviour:
   - name: GoblinHit
     clip: {fileID: 8300000, guid: 7745f21f65303e04daffc5ea28345db7, type: 3}
     volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: HeartBeat
+    clip: {fileID: 8300000, guid: ba85e9303411670439675b48b7d2b188, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: PlayerHit
+    clip: {fileID: 8300000, guid: bc93b5debe3c7214d928e0dca8d2c413, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonStabHit
+    clip: {fileID: 8300000, guid: 0dd69bce8e4c4964db255e29eb372274, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SkeletonWalk
+    clip: {fileID: 8300000, guid: a68eebc95fb30e146adb6fddbd24641d, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: SkeletonSlice
+    clip: {fileID: 8300000, guid: 03802387043d62841b9c67e59b198c6d, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BonesFalling
+    clip: {fileID: 8300000, guid: 5b80dc77fad21a047a48309c07089d06, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BatWings
+    clip: {fileID: 8300000, guid: c86583093dca83c468bb3c9a73abf0f1, type: 3}
+    volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}

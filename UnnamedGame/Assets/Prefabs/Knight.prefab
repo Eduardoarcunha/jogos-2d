@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 121570741513795300}
   - component: {fileID: 1286963780124691618}
   - component: {fileID: 7176473367121093432}
+  - component: {fileID: -405358869516911701}
   m_Layer: 12
   m_Name: Knight
   m_TagString: Player
@@ -340,3 +341,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   emptyFlaskSprite: {fileID: 21300000, guid: 9428746f09f5e9242884722ff8775f75, type: 3}
+--- !u!81 &-405358869516911701
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8046040543957836233}
+  m_Enabled: 1
