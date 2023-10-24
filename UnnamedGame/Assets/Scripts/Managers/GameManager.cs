@@ -77,8 +77,10 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.GameOver:
+                AudioManager.instance.StopSound("BossMusic");
                 break;
             case GameState.WonGame:
+                AudioManager.instance.StopSound("BossMusic");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gameState), gameState, null);

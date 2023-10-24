@@ -251,6 +251,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Key"))
         {
+            AudioManager.instance.PlaySound("PickKey");
             OnKeyCollect?.Invoke();
             Destroy(other.gameObject);
             keyUI.SetActive(true);
