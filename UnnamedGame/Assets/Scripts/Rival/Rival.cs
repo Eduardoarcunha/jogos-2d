@@ -7,6 +7,7 @@ public class Rival : MonoBehaviour
     // Player-related
     [SerializeField] private GameObject player;
     private int playerMask;
+    public Canvas targetCanvas; // Drag your canvas here in the inspector
 
     // Components and scripts
     private int gameObjectId;
@@ -78,9 +79,28 @@ public class Rival : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         playerMask = LayerMask.GetMask("Player");
     }
+    public void ShowCanvas()
+    {
+        targetCanvas.gameObject.SetActive(true);
+    }
 
+    IEnumerator HideCanvasAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        targetCanvas.gameObject.SetActive(false);
+        
+        // If you want to delete it instead of just hiding it, use the line below:
+        // Destroy(targetCanvas.gameObject);
+    }
     private void Start()
     {
+
+        if (targetCanvas != null)
+        {
+            ShowCanvas();
+            StartCoroutine(HideCanvasAfterSeconds(3));
+        }
+
         maxLife = 50;
         life = maxLife;
         healthBar.UpdateBar(life, maxLife);
